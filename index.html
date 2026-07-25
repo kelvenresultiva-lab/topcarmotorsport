@@ -1013,21 +1013,23 @@
     overflow:hidden;
     border-radius:12px;
     position:relative;
+    aspect-ratio:16/9;
   }
   .carousel-slide{
     display:none;
     width:100%;
-    height:auto;
+    height:100%;
   }
   .carousel-slide.active{
     display:block;
   }
   .carousel-slide img{
     width:100%;
-    height:auto;
+    height:100%;
     display:block;
     border-radius:8px;
     box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    object-fit:cover;
   }
   .carousel-dots-grid{
     position:absolute;
