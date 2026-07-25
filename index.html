@@ -987,57 +987,52 @@
   .gallery-carousel-grid{
     position:relative;
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
     gap:30px;
     margin-top:50px;
   }
   .carousel-nav{
-    background:transparent;
-    border:none;
-    color:var(--gray-dark);
-    font-size:28px;
-    cursor:pointer;
-    padding:10px 15px;
-    transition:all 0.3s ease;
-    flex-shrink:0;
-    z-index:5;
+    display:none;
   }
   .carousel-nav:hover{
     color:var(--blue);
     transform:scale(1.2);
   }
   .carousel-container-grid{
-    flex:1;
-    max-width:1000px;
-    overflow:hidden;
-    border-radius:12px;
-    position:relative;
-    display:flex;
+    width:100%;
+    max-width:1200px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+    padding:0 20px;
   }
   .carousel-slide{
-    display:none;
+    display:block;
     width:100%;
-    flex-shrink:0;
+    overflow:hidden;
+    border-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.15);
   }
   .carousel-slide.active{
     display:block;
   }
   .carousel-slide img{
     width:100%;
-    height:auto;
+    height:320px;
+    object-fit:cover;
     display:block;
     border-radius:8px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.15);
   }
   .carousel-dots-grid{
-    position:absolute;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
+    position:static;
+    transform:none;
     display:flex;
     gap:12px;
+    justify-content:center;
     z-index:10;
+    margin-top:20px;
   }
   .dot{
     width:12px;
@@ -1058,41 +1053,13 @@
   }
 
   @media (max-width: 640px){
-    .gallery-carousel-grid{
-      gap:15px;
-      flex-direction:column;
-    }
-    .carousel-nav{
-      display:none;
-    }
     .carousel-container-grid{
-      max-width:100%;
-      overflow-x:auto;
-      overflow-y:hidden;
-      scroll-behavior:smooth;
-      -webkit-overflow-scrolling:touch;
-    }
-    .carousel-slide{
-      display:none !important;
-      min-width:calc(50vw - 25px);
-      max-width:calc(50vw - 25px);
-      flex-shrink:0;
-    }
-    .carousel-slide.active{
-      display:block !important;
-    }
-    .carousel-slide.active + .carousel-slide{
-      display:block !important;
+      grid-template-columns:repeat(2, 1fr);
+      gap:15px;
+      padding:0 16px;
     }
     .carousel-slide img{
-      min-height:300px;
-      max-height:400px;
-    }
-    .carousel-dots-grid{
-      bottom:auto;
-      margin-top:15px;
-      position:static;
-      transform:none;
+      height:250px;
     }
   }
 
