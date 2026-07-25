@@ -983,7 +983,7 @@
     .services-cta{border-left:none;padding-left:0;}
   }
 
-  /* ===== GALLERY CAROUSEL GRID ===== */
+  /* ===== GALLERY CAROUSEL ===== */
   .gallery-carousel-grid{
     position:relative;
     display:flex;
@@ -1009,40 +1009,29 @@
   }
   .carousel-container-grid{
     flex:1;
-    max-width:1200px;
-    overflow:hidden;
-    position:relative;
-  }
-  .gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:24px;
-    display:none;
-  }
-  .gallery-grid.active{
-    display:grid;
-  }
-  .gallery-item{
-    position:relative;
+    max-width:1000px;
     overflow:hidden;
     border-radius:12px;
-    aspect-ratio:4/3;
-    box-shadow:0 8px 24px rgba(0,0,0,0.12);
-    transition:transform 0.3s ease, box-shadow 0.3s ease;
+    position:relative;
   }
-  .gallery-item:hover{
-    transform:translateY(-8px) scale(1.02);
-    box-shadow:0 16px 40px rgba(0,0,0,0.18);
-  }
-  .gallery-item img{
+  .carousel-slide{
+    display:none;
     width:100%;
-    height:100%;
-    object-fit:cover;
+    height:auto;
+  }
+  .carousel-slide.active{
     display:block;
+  }
+  .carousel-slide img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.15);
   }
   .carousel-dots-grid{
     position:absolute;
-    bottom:-50px;
+    bottom:20px;
     left:50%;
     transform:translateX(-50%);
     display:flex;
@@ -1053,7 +1042,7 @@
     width:12px;
     height:12px;
     border-radius:50%;
-    background:var(--gray-light);
+    background:rgba(255,255,255,0.6);
     cursor:pointer;
     transition:all 0.3s ease;
     border:2px solid transparent;
@@ -1064,49 +1053,22 @@
     height:14px;
   }
   .dot:hover{
-    background:var(--gray-dark);
-  }
-
-  @media (max-width: 1024px){
-    .gallery-grid{
-      grid-template-columns:repeat(2, 1fr);
-    }
+    background:rgba(255,255,255,0.9);
   }
 
   @media (max-width: 640px){
     .gallery-carousel-grid{
-      gap:20px;
+      gap:15px;
     }
     .carousel-nav{
-      display:none;
+      font-size:20px;
+      padding:8px 10px;
     }
     .carousel-container-grid{
       max-width:100%;
-      overflow-x:auto;
-      overflow-y:hidden;
-      scroll-behavior:smooth;
-      -webkit-overflow-scrolling:touch;
-    }
-    .gallery-grid{
-      display:flex;
-      gap:12px;
-      flex-direction:row;
-      min-width:100%;
-      overflow-x:auto;
-      overflow-y:hidden;
-      -webkit-overflow-scrolling:touch;
-    }
-    .gallery-item{
-      min-width:calc(100vw - 40px);
-      max-width:calc(100vw - 40px);
-      aspect-ratio:16/10;
-      flex-shrink:0;
     }
     .carousel-dots-grid{
-      bottom:auto;
-      margin-top:10px;
-      position:static;
-      transform:none;
+      bottom:15px;
     }
   }
 
@@ -1858,38 +1820,38 @@
     </div>
 
     <div class="gallery-carousel-grid">
-      <button class="carousel-nav carousel-prev" onclick="changeGridSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+      <button class="carousel-nav carousel-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
 
       <div class="carousel-container-grid">
-        <div class="gallery-grid active">
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop1.png" alt="Professional workshop">
-          </div>
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop2.png" alt="Professional workshop">
-          </div>
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop3.png" alt="Professional workshop">
-          </div>
+        <div class="carousel-slide active">
+          <img src="assets/topfotos/workshop1.png" alt="Professional workshop">
         </div>
-        <div class="gallery-grid">
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop4.png" alt="Professional workshop">
-          </div>
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop5.png" alt="Professional workshop">
-          </div>
-          <div class="gallery-item">
-            <img src="assets/topfotos/workshop6.png" alt="Professional workshop">
-          </div>
+        <div class="carousel-slide">
+          <img src="assets/topfotos/workshop2.png" alt="Professional workshop">
+        </div>
+        <div class="carousel-slide">
+          <img src="assets/topfotos/workshop3.png" alt="Professional workshop">
+        </div>
+        <div class="carousel-slide">
+          <img src="assets/topfotos/workshop4.png" alt="Professional workshop">
+        </div>
+        <div class="carousel-slide">
+          <img src="assets/topfotos/workshop5.png" alt="Professional workshop">
+        </div>
+        <div class="carousel-slide">
+          <img src="assets/topfotos/workshop6.png" alt="Professional workshop">
         </div>
       </div>
 
-      <button class="carousel-nav carousel-next" onclick="changeGridSlide(1)"><i class="fas fa-chevron-right"></i></button>
+      <button class="carousel-nav carousel-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
 
       <div class="carousel-dots-grid">
-        <span class="dot active" onclick="currentGridSlide(0)"></span>
-        <span class="dot" onclick="currentGridSlide(1)"></span>
+        <span class="dot active" onclick="currentSlide(0)"></span>
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+        <span class="dot" onclick="currentSlide(5)"></span>
       </div>
     </div>
   </div>
@@ -1999,73 +1961,39 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Gallery Grid Carousel functionality
-  let currentGridIndex = 0;
-  const totalGrids = 2;
-  let touchStartX = 0;
-  let touchEndX = 0;
+  // Gallery Carousel functionality
+  let currentSlideIndex = 0;
+  const totalSlides = 6;
 
-  function changeGridSlide(direction) {
-    currentGridIndex += direction;
-    if (currentGridIndex >= totalGrids) currentGridIndex = 0;
-    if (currentGridIndex < 0) currentGridIndex = totalGrids - 1;
-    updateGridCarousel();
+  function changeSlide(direction) {
+    currentSlideIndex += direction;
+    if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
+    if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
+    updateCarousel();
   }
 
-  function currentGridSlide(index) {
-    currentGridIndex = index;
-    updateGridCarousel();
+  function currentSlide(index) {
+    currentSlideIndex = index;
+    updateCarousel();
   }
 
-  function updateGridCarousel() {
-    const grids = document.querySelectorAll('.gallery-grid');
+  function updateCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.dot');
 
-    grids.forEach((grid, index) => {
-      grid.classList.remove('active');
-      if (index === currentGridIndex) {
-        grid.classList.add('active');
+    slides.forEach((slide, index) => {
+      slide.classList.remove('active');
+      if (index === currentSlideIndex) {
+        slide.classList.add('active');
       }
     });
 
     dots.forEach((dot, index) => {
       dot.classList.remove('active');
-      if (index === currentGridIndex) {
+      if (index === currentSlideIndex) {
         dot.classList.add('active');
       }
     });
-  }
-
-  // Mobile carousel touch/swipe support
-  const carouselContainer = document.querySelector('.carousel-container-grid');
-  if (carouselContainer) {
-    carouselContainer.addEventListener('scroll', function() {
-      const grids = document.querySelectorAll('.gallery-grid');
-      const itemWidth = carouselContainer.scrollWidth / totalGrids;
-      const scrollLeft = carouselContainer.scrollLeft;
-      const newIndex = Math.round(scrollLeft / itemWidth);
-      if (newIndex !== currentGridIndex && newIndex < totalGrids) {
-        currentGridIndex = newIndex;
-        updateGridCarousel();
-      }
-    }, { passive: true });
-
-    carouselContainer.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    carouselContainer.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, { passive: true });
-  }
-
-  function handleSwipe() {
-    if (touchStartX - touchEndX > 50) {
-      changeGridSlide(1);
-    } else if (touchEndX - touchStartX > 50) {
-      changeGridSlide(-1);
-    }
   }
 
   // Contact form -> opens email client with prefilled message
