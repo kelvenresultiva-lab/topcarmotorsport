@@ -1245,18 +1245,28 @@
     .footer-grid{ grid-template-columns:1fr; gap:30px; }
   }
 
-  @media (max-width: 760px){
+  @media (max-width: 1024px){
     .main-nav, .header-call{ display:none; }
     .nav-toggle{ display:block; }
-    .hero{ padding:100px 0 80px; min-height:auto; }
-    .hero h1{ font-size:38px; }
-    .hero p.lead{ font-size:16px; }
-    .intro-section{ background-image:none; background-size:0; background-position:0; }
     section{ padding:64px 0; }
-    .section-title{ font-size:28px; }
     .services-grid{ grid-template-columns:1fr; }
     .mobile-cta{ display:flex; }
     body{ padding-bottom:70px; }
+  }
+
+  @media (max-width: 640px){
+    .hero{ padding:80px 0 60px; min-height:auto; }
+    .hero h1{ font-size:36px; line-height:1.2; }
+    .hero p.lead{ font-size:15px; }
+    .intro-section{ background-image:none; background-size:0; background-position:0; padding:60px 0; }
+    .intro-heading{ font-size:32px; }
+    .intro-stat{ font-size:22px; }
+    .intro-text{ font-size:14px; max-width:100%; }
+    .intro-content{ max-width:100%; }
+    .section-title{ font-size:26px; }
+    .services-header{ margin-bottom:50px; }
+    .brand-card{ min-height:80px; padding:20px 15px; }
+    .brand-card img{ height:100px; max-width:100px; }
   }
 
   @media (prefers-reduced-motion: reduce){
