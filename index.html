@@ -983,6 +983,82 @@
     .services-cta{border-left:none;padding-left:0;}
   }
 
+  /* ===== GALLERY CAROUSEL ===== */
+  .gallery-carousel{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:30px;
+    margin-top:50px;
+  }
+  .carousel-nav{
+    background:transparent;
+    border:none;
+    color:var(--gray-dark);
+    font-size:28px;
+    cursor:pointer;
+    padding:10px 15px;
+    transition:all 0.3s ease;
+    flex-shrink:0;
+    z-index:5;
+  }
+  .carousel-nav:hover{
+    color:var(--blue);
+    transform:scale(1.2);
+  }
+  .carousel-container{
+    flex:1;
+    max-width:900px;
+    overflow:hidden;
+    border-radius:12px;
+    position:relative;
+  }
+  .carousel-track{
+    display:flex;
+    transition:transform 0.5s ease;
+  }
+  .carousel-slide{
+    min-width:100%;
+    display:none;
+  }
+  .carousel-slide.active{
+    display:block;
+  }
+  .carousel-slide img{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:8px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.15);
+  }
+  .carousel-dots{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:12px;
+    z-index:10;
+  }
+  .dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.6);
+    cursor:pointer;
+    transition:all 0.3s ease;
+    border:2px solid transparent;
+  }
+  .dot.active{
+    background:var(--blue);
+    width:14px;
+    height:14px;
+  }
+  .dot:hover{
+    background:rgba(255,255,255,0.9);
+  }
+
   /* ===== WHY US ===== */
   .why-grid{
     display:grid;
@@ -1745,24 +1821,41 @@
       <p class="section-sub">We're a local shop, not a chain. Here's what that means for you.</p>
     </div>
 
-    <div class="gallery-grid">
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop1.png" alt="Professional workshop">
+    <div class="gallery-carousel">
+      <button class="carousel-nav carousel-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+
+      <div class="carousel-container">
+        <div class="carousel-track">
+          <div class="carousel-slide active">
+            <img src="assets/topfotos/workshop1.png" alt="Professional workshop">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/topfotos/workshop2.png" alt="Professional workshop">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/topfotos/workshop3.png" alt="Professional workshop">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/topfotos/workshop4.png" alt="Professional workshop">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/topfotos/workshop5.png" alt="Professional workshop">
+          </div>
+          <div class="carousel-slide">
+            <img src="assets/topfotos/workshop6.png" alt="Professional workshop">
+          </div>
+        </div>
       </div>
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop2.png" alt="Professional workshop">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop3.png" alt="Professional workshop">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop4.png" alt="Professional workshop">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop5.png" alt="Professional workshop">
-      </div>
-      <div class="gallery-item">
-        <img src="assets/topfotos/workshop6.png" alt="Professional workshop">
+
+      <button class="carousel-nav carousel-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+
+      <div class="carousel-dots">
+        <span class="dot active" onclick="currentSlide(0)"></span>
+        <span class="dot" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+        <span class="dot" onclick="currentSlide(4)"></span>
+        <span class="dot" onclick="currentSlide(5)"></span>
       </div>
     </div>
   </div>
@@ -1857,22 +1950,60 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // Carousel functionality
+  let currentSlideIndex = 0;
+  const totalSlides = 6;
+
+  function changeSlide(direction) {
+    currentSlideIndex += direction;
+    if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
+    if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
+    updateCarousel();
+  }
+
+  function currentSlide(index) {
+    currentSlideIndex = index;
+    updateCarousel();
+  }
+
+  function updateCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    slides.forEach((slide, index) => {
+      slide.classList.remove('active');
+      if (index === currentSlideIndex) {
+        slide.classList.add('active');
+      }
+    });
+
+    dots.forEach((dot, index) => {
+      dot.classList.remove('active');
+      if (index === currentSlideIndex) {
+        dot.classList.add('active');
+      }
+    });
+  }
+
   // Contact form -> opens email client with prefilled message
-  document.getElementById('quoteForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    const name = document.getElementById('name').value;
-    const phone = document.getElementById('phone').value;
-    const vehicle = document.getElementById('vehicle').value;
-    const message = document.getElementById('message').value;
-    const subject = encodeURIComponent('Quote Request from ' + name);
-    const body = encodeURIComponent(
-      'Name: ' + name + '\n' +
-      'Phone: ' + phone + '\n' +
-      'Vehicle: ' + vehicle + '\n\n' +
-      'Message:\n' + message
-    );
-    window.location.href = 'mailto:topcartewksbury@gmail.com?subject=' + subject + '&body=' + body;
-  });
+  const quoteForm = document.getElementById('quoteForm');
+  if (quoteForm) {
+    quoteForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const vehicle = document.getElementById('vehicle').value;
+      const message = document.getElementById('message').value;
+      const subject = encodeURIComponent('Quote Request from ' + name);
+      const body = encodeURIComponent(
+        'Name: ' + name + '\n' +
+        'Phone: ' + phone + '\n' +
+        'Vehicle: ' + vehicle + '\n\n' +
+        'Message:\n' + message
+      );
+      window.location.href = 'mailto:topcartewksbury@gmail.com?subject=' + subject + '&body=' + body;
+    });
+  }
 </script>
 </body>
 </html>
