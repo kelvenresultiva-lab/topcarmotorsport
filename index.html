@@ -983,8 +983,8 @@
     .services-cta{border-left:none;padding-left:0;}
   }
 
-  /* ===== GALLERY CAROUSEL ===== */
-  .gallery-carousel{
+  /* ===== GALLERY CAROUSEL GRID ===== */
+  .gallery-carousel-grid{
     position:relative;
     display:flex;
     align-items:center;
@@ -1007,34 +1007,42 @@
     color:var(--blue);
     transform:scale(1.2);
   }
-  .carousel-container{
+  .carousel-container-grid{
     flex:1;
-    max-width:900px;
+    max-width:1200px;
     overflow:hidden;
-    border-radius:12px;
     position:relative;
   }
-  .carousel-track{
-    display:flex;
-    transition:transform 0.5s ease;
-  }
-  .carousel-slide{
-    min-width:100%;
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
     display:none;
   }
-  .carousel-slide.active{
-    display:block;
+  .gallery-grid.active{
+    display:grid;
   }
-  .carousel-slide img{
+  .gallery-item{
+    position:relative;
+    overflow:hidden;
+    border-radius:12px;
+    aspect-ratio:4/3;
+    box-shadow:0 8px 24px rgba(0,0,0,0.12);
+    transition:transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .gallery-item:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 16px 40px rgba(0,0,0,0.18);
+  }
+  .gallery-item img{
     width:100%;
-    height:auto;
+    height:100%;
+    object-fit:cover;
     display:block;
-    border-radius:8px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.15);
   }
-  .carousel-dots{
+  .carousel-dots-grid{
     position:absolute;
-    bottom:20px;
+    bottom:-50px;
     left:50%;
     transform:translateX(-50%);
     display:flex;
@@ -1045,7 +1053,7 @@
     width:12px;
     height:12px;
     border-radius:50%;
-    background:rgba(255,255,255,0.6);
+    background:var(--gray-light);
     cursor:pointer;
     transition:all 0.3s ease;
     border:2px solid transparent;
@@ -1056,7 +1064,33 @@
     height:14px;
   }
   .dot:hover{
-    background:rgba(255,255,255,0.9);
+    background:var(--gray-dark);
+  }
+
+  @media (max-width: 1024px){
+    .gallery-grid{
+      grid-template-columns:repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px){
+    .gallery-carousel-grid{
+      gap:15px;
+    }
+    .carousel-nav{
+      font-size:20px;
+      padding:8px 10px;
+    }
+    .carousel-container-grid{
+      max-width:100%;
+    }
+    .gallery-grid{
+      grid-template-columns:repeat(2, 1fr);
+      gap:16px;
+    }
+    .carousel-dots-grid{
+      bottom:-40px;
+    }
   }
 
   /* ===== WHY US ===== */
@@ -1821,41 +1855,39 @@
       <p class="section-sub">We're a local shop, not a chain. Here's what that means for you.</p>
     </div>
 
-    <div class="gallery-carousel">
-      <button class="carousel-nav carousel-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+    <div class="gallery-carousel-grid">
+      <button class="carousel-nav carousel-prev" onclick="changeGridSlide(-1)"><i class="fas fa-chevron-left"></i></button>
 
-      <div class="carousel-container">
-        <div class="carousel-track">
-          <div class="carousel-slide active">
+      <div class="carousel-container-grid">
+        <div class="gallery-grid active">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop1.png" alt="Professional workshop">
           </div>
-          <div class="carousel-slide">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop2.png" alt="Professional workshop">
           </div>
-          <div class="carousel-slide">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop3.png" alt="Professional workshop">
           </div>
-          <div class="carousel-slide">
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop4.png" alt="Professional workshop">
           </div>
-          <div class="carousel-slide">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop5.png" alt="Professional workshop">
           </div>
-          <div class="carousel-slide">
+          <div class="gallery-item">
             <img src="assets/topfotos/workshop6.png" alt="Professional workshop">
           </div>
         </div>
       </div>
 
-      <button class="carousel-nav carousel-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+      <button class="carousel-nav carousel-next" onclick="changeGridSlide(1)"><i class="fas fa-chevron-right"></i></button>
 
-      <div class="carousel-dots">
-        <span class="dot active" onclick="currentSlide(0)"></span>
-        <span class="dot" onclick="currentSlide(1)"></span>
-        <span class="dot" onclick="currentSlide(2)"></span>
-        <span class="dot" onclick="currentSlide(3)"></span>
-        <span class="dot" onclick="currentSlide(4)"></span>
-        <span class="dot" onclick="currentSlide(5)"></span>
+      <div class="carousel-dots-grid">
+        <span class="dot active" onclick="currentGridSlide(0)"></span>
+        <span class="dot" onclick="currentGridSlide(1)"></span>
       </div>
     </div>
   </div>
@@ -1950,36 +1982,36 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Carousel functionality
-  let currentSlideIndex = 0;
-  const totalSlides = 6;
+  // Gallery Grid Carousel functionality
+  let currentGridIndex = 0;
+  const totalGrids = 2;
 
-  function changeSlide(direction) {
-    currentSlideIndex += direction;
-    if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
-    if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
-    updateCarousel();
+  function changeGridSlide(direction) {
+    currentGridIndex += direction;
+    if (currentGridIndex >= totalGrids) currentGridIndex = 0;
+    if (currentGridIndex < 0) currentGridIndex = totalGrids - 1;
+    updateGridCarousel();
   }
 
-  function currentSlide(index) {
-    currentSlideIndex = index;
-    updateCarousel();
+  function currentGridSlide(index) {
+    currentGridIndex = index;
+    updateGridCarousel();
   }
 
-  function updateCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
+  function updateGridCarousel() {
+    const grids = document.querySelectorAll('.gallery-grid');
     const dots = document.querySelectorAll('.dot');
 
-    slides.forEach((slide, index) => {
-      slide.classList.remove('active');
-      if (index === currentSlideIndex) {
-        slide.classList.add('active');
+    grids.forEach((grid, index) => {
+      grid.classList.remove('active');
+      if (index === currentGridIndex) {
+        grid.classList.add('active');
       }
     });
 
     dots.forEach((dot, index) => {
       dot.classList.remove('active');
-      if (index === currentSlideIndex) {
+      if (index === currentGridIndex) {
         dot.classList.add('active');
       }
     });
