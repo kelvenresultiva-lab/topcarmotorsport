@@ -1075,21 +1075,38 @@
 
   @media (max-width: 640px){
     .gallery-carousel-grid{
-      gap:15px;
+      gap:20px;
     }
     .carousel-nav{
-      font-size:20px;
-      padding:8px 10px;
+      display:none;
     }
     .carousel-container-grid{
       max-width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      scroll-behavior:smooth;
+      -webkit-overflow-scrolling:touch;
     }
     .gallery-grid{
-      grid-template-columns:repeat(2, 1fr);
-      gap:16px;
+      display:flex;
+      gap:12px;
+      flex-direction:row;
+      min-width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;
+    }
+    .gallery-item{
+      min-width:calc(100vw - 40px);
+      max-width:calc(100vw - 40px);
+      aspect-ratio:16/10;
+      flex-shrink:0;
     }
     .carousel-dots-grid{
-      bottom:-40px;
+      bottom:auto;
+      margin-top:10px;
+      position:static;
+      transform:none;
     }
   }
 
@@ -1985,6 +2002,8 @@
   // Gallery Grid Carousel functionality
   let currentGridIndex = 0;
   const totalGrids = 2;
+  let touchStartX = 0;
+  let touchEndX = 0;
 
   function changeGridSlide(direction) {
     currentGridIndex += direction;
@@ -2015,6 +2034,38 @@
         dot.classList.add('active');
       }
     });
+  }
+
+  // Mobile carousel touch/swipe support
+  const carouselContainer = document.querySelector('.carousel-container-grid');
+  if (carouselContainer) {
+    carouselContainer.addEventListener('scroll', function() {
+      const grids = document.querySelectorAll('.gallery-grid');
+      const itemWidth = carouselContainer.scrollWidth / totalGrids;
+      const scrollLeft = carouselContainer.scrollLeft;
+      const newIndex = Math.round(scrollLeft / itemWidth);
+      if (newIndex !== currentGridIndex && newIndex < totalGrids) {
+        currentGridIndex = newIndex;
+        updateGridCarousel();
+      }
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+  }
+
+  function handleSwipe() {
+    if (touchStartX - touchEndX > 50) {
+      changeGridSlide(1);
+    } else if (touchEndX - touchStartX > 50) {
+      changeGridSlide(-1);
+    }
   }
 
   // Contact form -> opens email client with prefilled message
