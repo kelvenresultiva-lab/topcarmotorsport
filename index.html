@@ -1080,12 +1080,16 @@
   }
 
   @media (max-width: 640px){
+    .gallery-carousel-grid{
+      overflow:hidden;
+    }
     .carousel-container-grid{
-      padding:0;
-      gap:20px;
+      padding:0 10px;
+      gap:0;
       scroll-snap-type:x mandatory;
-      width:100vw;
-      margin-left:calc(-50vw + 50%);
+      width:100%;
+      overflow-x:auto;
+      overflow-y:hidden;
     }
     .carousel-container-grid::before,
     .carousel-container-grid::after{
@@ -1093,8 +1097,9 @@
     }
     .carousel-slide{
       width:calc(100vw - 40px);
+      min-width:calc(100vw - 40px);
       height:360px;
-      margin:0 20px;
+      margin:0 5px;
       border-radius:16px;
       box-shadow:0 10px 30px rgba(0,0,0,0.1);
       scroll-snap-align:center;
@@ -2028,8 +2033,10 @@
   function scrollToSlide(index) {
     if (!carousel) return;
 
-    const slideWidth = slides[0].offsetWidth + 30;
-    const scrollPosition = index * slideWidth - (carousel.offsetWidth - slideWidth) / 2;
+    const slide = slides[index];
+    const slideRect = slide.getBoundingClientRect();
+    const containerRect = carousel.getBoundingClientRect();
+    const scrollPosition = carousel.scrollLeft + (slideRect.left - containerRect.left) - (containerRect.width - slideRect.width) / 2;
 
     carousel.scrollTo({
       left: scrollPosition,
@@ -2102,12 +2109,22 @@
     carousel.addEventListener('scroll', () => {
       if (isScrolling) return;
 
-      const slideWidth = slides[0].offsetWidth + 30;
-      const centerPos = carousel.scrollLeft + carousel.offsetWidth / 2;
-      const newIndex = Math.round((centerPos - slideWidth / 2) / slideWidth);
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+      const containerCenter = carousel.scrollLeft + carousel.offsetWidth / 2;
 
-      if (newIndex !== currentSlideIndex && newIndex >= 0 && newIndex < totalSlides) {
-        currentSlideIndex = newIndex;
+      slides.forEach((slide, index) => {
+        const slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+        const distance = Math.abs(slideCenter - containerCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      if (closestIndex !== currentSlideIndex) {
+        currentSlideIndex = closestIndex;
         updateCarousel();
       }
     });
