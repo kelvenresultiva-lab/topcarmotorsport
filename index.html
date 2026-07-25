@@ -990,76 +990,121 @@
     flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:30px;
+    gap:40px;
     margin-top:50px;
   }
   .carousel-nav{
     display:none;
   }
-  .carousel-nav:hover{
-    color:var(--blue);
-    transform:scale(1.2);
-  }
   .carousel-container-grid{
+    position:relative;
     width:100%;
-    max-width:1200px;
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:20px;
-    padding:0 20px;
+    max-width:1400px;
+    overflow:hidden;
+    padding:0 40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .carousel-container-grid::before,
+  .carousel-container-grid::after{
+    content:'';
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:15%;
+    pointer-events:none;
+    z-index:5;
+  }
+  .carousel-container-grid::before{
+    left:0;
+    background:linear-gradient(90deg, rgba(var(--white-rgb, 255,255,255),1) 0%, rgba(var(--white-rgb, 255,255,255),0) 100%);
+  }
+  .carousel-container-grid::after{
+    right:0;
+    background:linear-gradient(90deg, rgba(var(--white-rgb, 255,255,255),0) 0%, rgba(var(--white-rgb, 255,255,255),1) 100%);
   }
   .carousel-slide{
     display:block;
-    width:100%;
+    flex-shrink:0;
+    width:480px;
+    height:420px;
     overflow:hidden;
-    border-radius:12px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.15);
+    border-radius:20px;
+    box-shadow:0 15px 50px rgba(0,0,0,0.12);
+    background:#ffffff;
+    transition:transform 600ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 600ms ease;
+    cursor:grab;
+    scroll-snap-align:center;
+    scroll-snap-stop:always;
+    margin:0 15px;
+  }
+  .carousel-slide:active{
+    cursor:grabbing;
   }
   .carousel-slide.active{
-    display:block;
+    transform:scale(1.02);
+    box-shadow:0 20px 60px rgba(0,0,0,0.18);
   }
   .carousel-slide img{
     width:100%;
-    height:320px;
+    height:100%;
     object-fit:cover;
     display:block;
-    border-radius:8px;
   }
   .carousel-dots-grid{
-    position:static;
+    position:relative;
     transform:none;
     display:flex;
-    gap:12px;
+    gap:10px;
     justify-content:center;
     z-index:10;
     margin-top:20px;
   }
   .dot{
-    width:12px;
-    height:12px;
+    width:10px;
+    height:10px;
     border-radius:50%;
-    background:rgba(255,255,255,0.6);
+    background:rgba(0,0,0,0.3);
     cursor:pointer;
-    transition:all 0.3s ease;
-    border:2px solid transparent;
+    transition:all 400ms ease;
+    border:none;
   }
   .dot.active{
     background:var(--blue);
-    width:14px;
-    height:14px;
+    width:28px;
+    border-radius:5px;
   }
   .dot:hover{
-    background:rgba(255,255,255,0.9);
+    background:rgba(0,0,0,0.5);
   }
 
   @media (max-width: 640px){
     .carousel-container-grid{
-      grid-template-columns:repeat(2, 1fr);
-      gap:15px;
-      padding:0 16px;
+      padding:0 20px;
+      gap:0;
     }
-    .carousel-slide img{
-      height:250px;
+    .carousel-container-grid::before,
+    .carousel-container-grid::after{
+      width:20%;
+    }
+    .carousel-slide{
+      width:calc(90vw - 40px);
+      height:360px;
+      margin:0 10px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    }
+    .carousel-slide.active{
+      transform:scale(1.01);
+      box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    }
+    .dot{
+      width:8px;
+      height:8px;
+    }
+    .dot.active{
+      width:24px;
     }
   }
 
@@ -1949,26 +1994,47 @@
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Gallery Carousel functionality
+  // Premium Carousel functionality
   let currentSlideIndex = 0;
   const totalSlides = 6;
+  const carousel = document.querySelector('.carousel-container-grid');
+  const slides = document.querySelectorAll('.carousel-slide');
+  let isScrolling = false;
+
+  // Initialize carousel
+  function initCarousel() {
+    updateCarousel();
+    setupDragListeners();
+  }
 
   function changeSlide(direction) {
     currentSlideIndex += direction;
     if (currentSlideIndex >= totalSlides) currentSlideIndex = 0;
     if (currentSlideIndex < 0) currentSlideIndex = totalSlides - 1;
-    updateCarousel();
+    scrollToSlide(currentSlideIndex);
   }
 
   function currentSlide(index) {
     currentSlideIndex = index;
-    updateCarousel();
+    scrollToSlide(index);
+  }
+
+  function scrollToSlide(index) {
+    if (!carousel) return;
+
+    const slideWidth = slides[0].offsetWidth + 30;
+    const scrollPosition = index * slideWidth - (carousel.offsetWidth - slideWidth) / 2;
+
+    carousel.scrollTo({
+      left: scrollPosition,
+      behavior: 'smooth'
+    });
+
+    isScrolling = true;
+    setTimeout(() => { isScrolling = false; }, 700);
   }
 
   function updateCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.dot');
-
     slides.forEach((slide, index) => {
       slide.classList.remove('active');
       if (index === currentSlideIndex) {
@@ -1976,12 +2042,74 @@
       }
     });
 
+    const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, index) => {
       dot.classList.remove('active');
       if (index === currentSlideIndex) {
         dot.classList.add('active');
       }
     });
+  }
+
+  function setupDragListeners() {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    carousel.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+      carousel.style.cursor = 'grabbing';
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+      isDown = false;
+    });
+
+    carousel.addEventListener('mouseup', () => {
+      isDown = false;
+      carousel.style.cursor = 'grab';
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch support
+    carousel.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].pageX - carousel.offsetLeft;
+      scrollLeft = carousel.scrollLeft;
+    });
+
+    carousel.addEventListener('touchmove', (e) => {
+      const x = e.touches[0].pageX - carousel.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Update active slide on scroll
+    carousel.addEventListener('scroll', () => {
+      if (isScrolling) return;
+
+      const slideWidth = slides[0].offsetWidth + 30;
+      const centerPos = carousel.scrollLeft + carousel.offsetWidth / 2;
+      const newIndex = Math.round((centerPos - slideWidth / 2) / slideWidth);
+
+      if (newIndex !== currentSlideIndex && newIndex >= 0 && newIndex < totalSlides) {
+        currentSlideIndex = newIndex;
+        updateCarousel();
+      }
+    });
+  }
+
+  // Initialize on load
+  if (carousel) {
+    initCarousel();
   }
 
   // Contact form -> opens email client with prefilled message
