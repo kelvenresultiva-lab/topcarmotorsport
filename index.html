@@ -173,7 +173,7 @@
     display:flex;
     align-items:center;
     gap:10px;
-    color:var(--black);
+    color:var(--white);
     text-decoration:none;
     font-family:'Rajdhani', sans-serif;
   }
@@ -199,7 +199,7 @@
   /* ===== HERO ===== */
   .hero{
     position:relative;
-    background:var(--black);
+    background:var(--white);
     overflow:hidden;
     padding:130px 0 110px;
     min-height:640px;
@@ -207,25 +207,13 @@
     align-items:center;
   }
   .hero-bg{
-    position:absolute;
-    inset:0;
-    z-index:0;
+    display:none;
   }
   .hero-bg img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:68% 22%;
-    display:block;
+    display:none;
   }
   .hero-bg::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-      radial-gradient(circle at 85% 25%, rgba(0,82,204,0.16), transparent 55%),
-      linear-gradient(90deg, rgba(6,6,6,0.96) 0%, rgba(6,6,6,0.88) 30%, rgba(6,6,6,0.55) 55%, rgba(6,6,6,0.35) 75%, rgba(6,6,6,0.55) 100%),
-      linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 35%, rgba(0,0,0,0.55) 100%);
+    display:none;
   }
   .scan-line{
     position:absolute;
@@ -263,13 +251,13 @@
   }
   .hero-badge i{ font-size:10px; }
   .hero h1{
-    color:var(--white);
+    color:var(--black);
     font-size:56px;
     margin-bottom:22px;
   }
   .hero h1 .accent{ color:var(--blue); }
   .hero p.lead{
-    color:#c9c9c9;
+    color:var(--black);
     font-size:17px;
     max-width:520px;
     margin-bottom:34px;
@@ -284,7 +272,7 @@
     display:flex;
     align-items:center;
     gap:10px;
-    color:#bbb;
+    color:var(--black);
     font-size:13px;
     font-family:'Rajdhani', sans-serif;
     font-weight:700;
@@ -292,6 +280,308 @@
     letter-spacing:0.5px;
   }
   .hero-trust i{ color:var(--blue); font-size:16px; }
+
+  /* ===== BRANDS ===== */
+  .brands-section{
+    background:transparent;
+    padding:50px 0 40px 0;
+  }
+  .brands-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:15px 15px;
+    row-gap:-30px;
+    margin-bottom:20px;
+  }
+  .brand-card{
+    background:transparent;
+    border:none;
+    border-radius:12px;
+    padding:25px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    transition:all .3s ease;
+    cursor:pointer;
+    min-height:100px;
+  }
+  .brand-card:hover{
+    transform:translateY(-8px) scale(1.05);
+    box-shadow:none;
+    border-color:transparent;
+    background:transparent;
+  }
+  .brand-card img{
+    height:140px;
+    width:auto;
+    max-width:140px;
+    object-fit:contain;
+    transition:transform .3s ease;
+  }
+  .brand-card:hover img{
+    transform:scale(1.1);
+  }
+  .brand-card i{
+    font-size:48px;
+    color:var(--blue);
+  }
+  .brand-card span{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    color:var(--black);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    display:none;
+  }
+  .brands-footer{
+    text-align:center;
+    color:var(--gray-mid);
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .brands-footer i{ color:var(--blue); font-size:16px; }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials-section{ background:var(--gray-bg); }
+  .testimonials-head{ max-width:800px; margin:0 auto 50px; text-align:center; }
+  .testimonials-head .section-title{ margin-bottom:20px; }
+  .rating-stars{ font-size:24px; color:var(--red); display:block; margin-bottom:8px; letter-spacing:2px; }
+  .rating-text{ color:var(--gray-mid); font-size:14px; }
+  .testimonials-slider{
+    display:flex;
+    gap:24px;
+    margin-bottom:40px;
+    overflow-x:auto;
+    scroll-behavior:smooth;
+    padding:8px 0;
+    scroll-snap-type:x mandatory;
+  }
+  .testimonials-slider::-webkit-scrollbar{
+    height:6px;
+  }
+  .testimonials-slider::-webkit-scrollbar-track{
+    background:var(--gray-light);
+    border-radius:10px;
+  }
+  .testimonials-slider::-webkit-scrollbar-thumb{
+    background:var(--blue);
+    border-radius:10px;
+  }
+  .testimonials-slider::-webkit-scrollbar-thumb:hover{
+    background:var(--blue-dark);
+  }
+  .testimonial-card{
+    background:var(--white);
+    border:1px solid var(--gray-light);
+    border-radius:8px;
+    padding:28px;
+    transition:transform .3s ease, box-shadow .3s ease;
+    min-width:340px;
+    max-width:340px;
+    flex-shrink:0;
+    scroll-snap-align:start;
+  }
+  .testimonial-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 16px 30px rgba(0,0,0,0.08);
+  }
+  .testimonial-header{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .testimonial-avatar{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:var(--blue);
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .testimonial-info{
+    flex:1;
+  }
+  .testimonial-info h4{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--blue);
+    margin:0 0 4px;
+  }
+  .testimonial-time{
+    font-size:12px;
+    color:var(--gray-mid);
+  }
+  .testimonial-header i{
+    font-size:20px;
+    color:var(--red);
+  }
+  .testimonial-stars{
+    font-size:16px;
+    color:var(--red);
+    margin-bottom:12px;
+    letter-spacing:1px;
+  }
+  .testimonial-text{
+    font-size:14px;
+    color:var(--gray-dark);
+    line-height:1.6;
+    margin:0;
+  }
+  .testimonials-footer{
+    text-align:center;
+  }
+
+  /* ===== ABOUT COMPANY ===== */
+  .about-company{ background:var(--white); }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1.1fr;
+    gap:60px;
+    align-items:start;
+  }
+  .about-side{
+    display:flex;
+    flex-direction:column;
+    gap:32px;
+  }
+  .about-image{
+    width:100%;
+    aspect-ratio:4/3;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 24px 48px rgba(0,0,0,0.15);
+    background:var(--gray-light);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .about-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    display:block;
+  }
+  .about-content h2{
+    font-size:42px;
+    margin-bottom:24px;
+  }
+  .about-content p{
+    color:var(--gray-dark);
+    font-size:16px;
+    margin-bottom:24px;
+    line-height:1.8;
+  }
+  .about-stats-inline{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:16px;
+    margin-top:32px;
+  }
+  .stat-card-inline{
+    background:linear-gradient(135deg, rgba(0,82,204,0.08) 0%, rgba(220,20,60,0.08) 100%);
+    border:2px solid var(--gray-light);
+    border-radius:12px;
+    padding:20px 16px;
+    text-align:center;
+    transition:all .3s ease;
+  }
+  .stat-card-inline:hover{
+    border-color:var(--blue);
+    transform:translateY(-4px);
+    box-shadow:0 12px 24px rgba(0,82,204,0.12);
+  }
+  .stat-card-inline .stat-number{
+    font-family:'Rajdhani', sans-serif;
+    font-size:36px;
+    font-weight:900;
+    color:var(--blue);
+    line-height:1;
+    margin-bottom:8px;
+  }
+  .stat-card-inline .stat-label{
+    font-size:12px;
+    color:var(--gray-mid);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    font-weight:700;
+  }
+  .about-values{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-top:32px;
+  }
+  .value-item{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .value-item i{
+    font-size:28px;
+    color:var(--blue);
+    width:fit-content;
+  }
+  .value-item h4{
+    font-size:17px;
+    color:var(--black);
+    margin:0;
+  }
+  .value-item p{
+    font-size:14px;
+    color:var(--gray-mid);
+    margin:0;
+  }
+  .about-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+  .stat-card{
+    background:linear-gradient(135deg, rgba(0,82,204,0.08) 0%, rgba(220,20,60,0.08) 100%);
+    border:2px solid var(--gray-light);
+    border-radius:12px;
+    padding:32px 24px;
+    text-align:center;
+    transition:all .3s ease;
+  }
+  .stat-card:hover{
+    border-color:var(--blue);
+    transform:translateY(-4px);
+    box-shadow:0 12px 24px rgba(0,82,204,0.12);
+  }
+  .stat-number{
+    font-family:'Rajdhani', sans-serif;
+    font-size:48px;
+    font-weight:900;
+    color:var(--blue);
+    line-height:1;
+    margin-bottom:8px;
+  }
+  .stat-label{
+    font-size:14px;
+    color:var(--gray-mid);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    font-weight:700;
+  }
+
+  @media (max-width: 980px){
+    .about-grid{ grid-template-columns:1fr; gap:40px; }
+    .about-values{ grid-template-columns:1fr; }
+  }
 
   /* ===== SECTION SHELL ===== */
   section{ padding:90px 0; }
@@ -307,30 +597,30 @@
   .intro-section{
     position:relative;
     overflow:hidden;
-    padding:110px 0;
+    padding:200px 0 110px 0;
     min-height:560px;
     display:flex;
     align-items:center;
+    background:var(--white);
+    background-image:url('assets/herootimizada.png');
+    background-size:100%;
+    background-repeat:no-repeat;
+    background-position:right center;
   }
   .intro-bg{
-    position:absolute;
-    inset:0;
-    z-index:0;
+    display:none;
   }
   .intro-bg img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:60% 45%;
-    display:block;
+    display:none;
   }
   .intro-section .container{
     position:relative;
     z-index:2;
     width:100%;
+    display:block;
   }
-  .intro-content{ max-width:560px; }
-  .intro-heading{ font-size:44px; margin-bottom:14px; }
+  .intro-content{ max-width:480px; }
+  .intro-heading{ font-size:44px; margin-bottom:14px; color:var(--black); }
   .intro-stat{
     font-family:'Rajdhani', sans-serif;
     font-weight:900;
@@ -343,50 +633,335 @@
   .intro-text{
     color:var(--gray-dark);
     font-size:15px;
-    max-width:480px;
     margin-bottom:32px;
+    line-height:1.8;
+  }
+  .intro-car-image{
+    background-image:url('assets/herootimizada.png');
+    background-size:contain;
+    background-repeat:no-repeat;
+    background-position:center right;
+    min-height:100%;
+  }
+  .intro-car-image img{
+    display:none;
   }
   .btn-dark{ background:var(--black); color:var(--white); }
   .btn-dark:hover{ background:#1a1a1a; transform:scale(1.05); }
 
   @media (max-width: 980px){
-    .intro-section{ min-height:auto; padding:80px 0; }
-    .intro-bg img{ object-position:65% 25%; }
-    .intro-content{ max-width:100%; }
+    .intro-section .container{
+      grid-template-columns:1fr;
+      gap:40px;
+    }
+    .intro-car-visual{
+      min-height:400px;
+    }
+  }
+  @media (max-width: 640px){
+    .intro-section{
+      padding:60px 0;
+    }
+    .intro-heading{
+      font-size:32px;
+    }
+    .intro-stat{
+      font-size:20px;
+    }
+    .intro-text{
+      font-size:14px;
+    }
+    .intro-car-visual{
+      min-height:300px;
+      padding:20px;
+    }
   }
 
   /* ===== SERVICES ===== */
+  #services{
+    background:#0f0f0f;
+    padding:90px 0;
+    position:relative;
+    overflow:hidden;
+  }
+  #services::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:500px;
+    background:linear-gradient(135deg, rgba(227,6,19,0.08) 0%, rgba(0,0,0,0.95) 100%);
+    z-index:0;
+  }
+  #services .container{
+    position:relative;
+    z-index:1;
+  }
+  .services-header{
+    text-align:center;
+    margin-bottom:70px;
+  }
+  .services-eyebrow{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    font-family:'Montserrat', sans-serif;
+    font-size:12px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:6px;
+    color:#E30613;
+    margin-bottom:30px;
+  }
+  .services-eyebrow i{
+    font-size:24px;
+  }
+  .services-eyebrow::before,
+  .services-eyebrow::after{
+    content:'';
+    width:80px;
+    height:1px;
+    background:#E30613;
+  }
+  .services-title{
+    font-family:'Arial', sans-serif;
+    font-size:64px;
+    font-weight:900;
+    color:var(--white);
+    margin-bottom:20px;
+    line-height:1.3;
+    letter-spacing:-1px;
+  }
+  .services-title .highlight{
+    color:#E30613;
+  }
+  .services-subtitle{
+    font-size:15px;
+    color:#aaaaaa;
+    max-width:700px;
+    margin:0 auto;
+    line-height:1.6;
+  }
   .services-grid{
     display:grid;
     grid-template-columns:repeat(4, 1fr);
     gap:24px;
+    margin-bottom:80px;
   }
   .service-card{
-    background:var(--white);
-    border:1px solid var(--gray-light);
-    border-radius:6px;
-    padding:32px 24px;
-    transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+    border-radius:12px;
+    overflow:hidden;
+    background:linear-gradient(135deg, #262626 0%, #1f1f1f 100%);
+    border:1px solid #333333;
+    transition:all 300ms ease;
+    animation:fadeInUp 0.6s ease forwards;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    height:280px;
   }
+  .service-card:nth-child(1){animation-delay:0ms;}
+  .service-card:nth-child(2){animation-delay:80ms;}
+  .service-card:nth-child(3){animation-delay:160ms;}
+  .service-card:nth-child(4){animation-delay:240ms;}
+  .service-card:nth-child(5){animation-delay:320ms;}
+  .service-card:nth-child(6){animation-delay:400ms;}
+  .service-card:nth-child(7){animation-delay:480ms;}
+  .service-card:nth-child(8){animation-delay:560ms;}
   .service-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 16px 30px rgba(0,0,0,0.08);
-    border-color:var(--blue);
+    transform:translateY(-10px);
+    box-shadow:0 25px 50px rgba(227,6,19,0.4);
+    border:1px solid #E30613;
+    background:linear-gradient(135deg, #2a2a2a 0%, #242424 100%);
+  }
+  .service-image{
+    width:100%;
+    height:220px;
+    overflow:hidden;
+    background:#2a2a2a;
+    position:relative;
+    flex-shrink:0;
+  }
+  .service-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+  }
+  .service-content{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    flex-grow:1;
+    position:relative;
   }
   .service-icon{
-    width:56px; height:56px;
+    width:32px;
+    height:32px;
     border-radius:50%;
-    background:rgba(0,82,204,0.1);
-    color:var(--blue);
-    display:flex; align-items:center; justify-content:center;
-    font-size:24px;
-    margin-bottom:20px;
+    background:#E30613;
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    position:absolute;
+    bottom:15px;
+    left:15px;
   }
   .service-card h3{
-    font-size:17px;
-    margin-bottom:10px;
+    font-size:16px;
+    font-weight:700;
+    color:var(--white);
+    margin:0 0 12px 0;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    line-height:1.2;
   }
-  .service-card p{ font-size:13.5px; color:var(--gray-mid); }
+  .service-card h3 .white{
+    color:var(--white);
+  }
+  .service-card h3 .red{
+    color:#E30613;
+  }
+  .service-card p{
+    font-size:13px;
+    color:#bbbbbb;
+    margin:0;
+    line-height:1.6;
+  }
+  .service-bar{
+    width:50px;
+    height:3px;
+    background:#E30613;
+    position:absolute;
+    bottom:15px;
+    right:15px;
+    border-radius:2px;
+  }
+  .services-footer{
+    background:#1a1a1a;
+    border-radius:16px;
+    padding:50px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:30px;
+    border:1px solid #2a2a2a;
+  }
+  .services-footer-item{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    border-right:1px solid #2a2a2a;
+    padding-right:30px;
+  }
+  .services-footer-item:last-child{
+    border-right:none;
+    padding-right:0;
+  }
+  .services-footer-icon{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#E30613;
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+  }
+  .services-footer-item h4{
+    font-size:14px;
+    font-weight:700;
+    color:var(--white);
+    margin:0;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .services-footer-item p{
+    font-size:13px;
+    color:#888888;
+    margin:0;
+    line-height:1.6;
+  }
+  .services-footer-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  .services-footer-list li{
+    font-size:13px;
+    color:#888888;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .services-footer-list li::before{
+    content:'✔';
+    color:#E30613;
+    font-weight:bold;
+    font-size:14px;
+  }
+  .services-cta{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    border-left:1px solid #2a2a2a;
+    padding-left:30px;
+  }
+  .services-cta p{
+    font-size:16px;
+    font-weight:700;
+    color:var(--white);
+    margin:0;
+    line-height:1.4;
+  }
+  .services-cta .btn{
+    background:#E30613;
+    color:var(--white);
+    border:none;
+    padding:16px 24px;
+    font-weight:700;
+    font-size:13px;
+    border-radius:4px;
+    cursor:pointer;
+    transition:background 300ms;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+  }
+  .services-cta .btn:hover{
+    background:#b30410;
+  }
+  @keyframes fadeInUp{
+    from{
+      opacity:0;
+      transform:translateY(30px);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+  @media(max-width:1024px){
+    .services-grid{grid-template-columns:repeat(2, 1fr);}
+    .services-footer{grid-template-columns:repeat(2, 1fr);}
+    .services-cta{border-left:none;border-top:1px solid #2a2a2a;padding-left:0;padding-top:30px;}
+  }
+  @media(max-width:640px){
+    .services-grid{grid-template-columns:1fr;}
+    .services-footer{grid-template-columns:1fr;}
+    .services-title{font-size:42px;}
+    #services{padding:60px 0;}
+    .services-footer-item{border-right:none;padding-right:0;}
+    .services-cta{border-left:none;padding-left:0;}
+  }
 
   /* ===== WHY US ===== */
   .why-grid{
@@ -453,8 +1028,8 @@
   .since-badge strong{ color:var(--white); }
 
   .cta-card{
-    background:#141414;
-    border:1px solid #2a2a2a;
+    background:var(--white);
+    border:1px solid var(--gray-light);
     border-radius:8px;
     padding:32px;
   }
@@ -481,10 +1056,10 @@
     text-transform:uppercase;
     letter-spacing:0.5px;
     margin-bottom:3px;
-    color:var(--white);
+    color:var(--black);
   }
   .cta-card .row span, .cta-card .row a{
-    color:#aaa;
+    color:var(--gray-dark);
     font-size:14px;
     text-decoration:none;
   }
@@ -673,8 +1248,10 @@
   @media (max-width: 760px){
     .main-nav, .header-call{ display:none; }
     .nav-toggle{ display:block; }
-    .hero{ padding:60px 0 50px; }
-    .hero h1{ font-size:32px; }
+    .hero{ padding:100px 0 80px; min-height:auto; }
+    .hero h1{ font-size:38px; }
+    .hero p.lead{ font-size:16px; }
+    .intro-section{ background-image:none; background-size:0; background-position:0; }
     section{ padding:64px 0; }
     .section-title{ font-size:28px; }
     .services-grid{ grid-template-columns:1fr; }
@@ -760,55 +1337,339 @@
   </div>
 </section>
 
+<!-- ===== BRANDS ===== -->
+<section class="brands-section">
+  <div class="container">
+    <div class="section-head center">
+      <h2 class="section-title">We Work With All Major Brands</h2>
+      <p class="section-sub">Servicing domestic, imported, and luxury vehicles.</p>
+    </div>
+
+    <div class="brands-grid">
+      <div class="brand-card">
+        <img src="assets/bmw.jpg" alt="BMW">
+      </div>
+      <div class="brand-card">
+        <img src="assets/mercedez.jpg" alt="Mercedes-Benz">
+      </div>
+      <div class="brand-card">
+        <img src="assets/audi.jpg" alt="Audi">
+      </div>
+      <div class="brand-card">
+        <img src="assets/vookswagen.jpg" alt="Volkswagen">
+      </div>
+      <div class="brand-card">
+        <img src="assets/toyota.jpg" alt="Toyota">
+      </div>
+      <div class="brand-card">
+        <img src="assets/honda.jpg" alt="Honda">
+      </div>
+      <div class="brand-card">
+        <img src="assets/nissan.jpg" alt="Nissan">
+      </div>
+      <div class="brand-card">
+        <img src="assets/ford.jpg" alt="Ford">
+      </div>
+      <div class="brand-card">
+        <img src="assets/chevrolet.webp" alt="Chevrolet" class="chevrolet-logo" style="filter: saturate(0.3) contrast(1.2) brightness(1.1);">
+      </div>
+      <div class="brand-card">
+        <img src="assets/jeep.jpg" alt="Jeep">
+      </div>
+      <div class="brand-card">
+        <img src="assets/ram.png" alt="RAM">
+      </div>
+      <div class="brand-card">
+        <img src="assets/jaguar.png" alt="Jaguar">
+      </div>
+    </div>
+
+    <p class="brands-footer"><i class="fas fa-car"></i> And many more</p>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section alt-bg">
+  <div class="container">
+    <div class="testimonials-head">
+      <span class="eyebrow">Customer Testimonials</span>
+      <h2 class="section-title">100% Approved by Customers</h2>
+      <p class="testimonials-rating">
+        <span class="rating-stars">★★★★★</span>
+        <span class="rating-text">4.8 out of 5 stars • Based on customer feedback</span>
+      </p>
+    </div>
+
+    <div class="testimonials-slider" id="testimonialsSlider">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div class="testimonial-info">
+            <h4>John Smith</h4>
+            <span class="testimonial-time">2 months ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Excellent service! The technicians were professional and knowledgeable. They fixed my car exactly as promised and at a fair price. I highly recommend Top Car Motor Sport!</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div class="testimonial-info">
+            <h4>Maria Garcia</h4>
+            <span class="testimonial-time">3 months ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Fast and reliable service. The team diagnosed my problem quickly and got me back on the road the same day. Great customer service and honest pricing!</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">R</div>
+          <div class="testimonial-info">
+            <h4>Robert Johnson</h4>
+            <span class="testimonial-time">1 month ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Best auto repair shop in Tewksbury! They've been servicing my cars for years. Always honest, always professional. I wouldn't trust my vehicle anywhere else.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div class="testimonial-info">
+            <h4>Sarah Williams</h4>
+            <span class="testimonial-time">1 week ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Highly professional team! They explained everything in detail and didn't try to oversell me on unnecessary services. Very fair pricing and excellent results.</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">D</div>
+          <div class="testimonial-info">
+            <h4>David Martinez</h4>
+            <span class="testimonial-time">3 weeks ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Got my car fixed on time and within budget. The staff was friendly and knowledgeable. Will definitely be back for all my future auto repair needs!</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div class="testimonial-info">
+            <h4>Linda Thompson</h4>
+            <span class="testimonial-time">2 weeks ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Best decision to bring my car here! Quick diagnosis, fair pricing, and excellent workmanship. I recommend them to all my friends and family!</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">C</div>
+          <div class="testimonial-info">
+            <h4>Carlos Rodriguez</h4>
+            <span class="testimonial-time">1 month ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Top notch service from start to finish! Professional, honest, and they really care about their customers. Top Car Motor Sport is the best in town!</p>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">E</div>
+          <div class="testimonial-info">
+            <h4>Emily Brown</h4>
+            <span class="testimonial-time">6 days ago</span>
+          </div>
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">Amazing experience! They fixed my transmission issue perfectly. Couldn't be happier with the results. Will be a loyal customer for years to come!</p>
+      </div>
+    </div>
+
+    <div class="testimonials-footer">
+      <a href="#" class="btn btn-primary" style="background-color:var(--red);"><i class="fas fa-star"></i> Read All Reviews</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ABOUT COMPANY ===== -->
+<section class="about-company">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-content">
+        <span class="eyebrow">About Top Car Motor Sport</span>
+        <h2>Your Local Auto Repair Shop</h2>
+
+        <p>Top Car Motor Sport was founded with a simple mission: to bring personal, honest auto repair back to Tewksbury. We're tired of the big chains, the runaround, and the upselling. So we built something different.</p>
+
+        <p>We're a team of certified technicians who genuinely care about your vehicle. Whether it's routine maintenance or a complex diagnosis, we treat every car like it's our own. With over 2 years of combined experience, we've earned the trust of 500+ happy customers across 12 major brands. Our commitment to excellence ensures 100% customer satisfaction on every job.</p>
+      </div>
+
+      <div class="about-side">
+        <div class="about-image">
+          <img src="assets/local.jpeg" alt="Top Car Motor Sport Team">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== SERVICES ===== -->
 <section id="services">
   <div class="container">
-    <div class="section-head center">
-      <span class="eyebrow">What We Fix</span>
-      <h2 class="section-title">Full-Service Auto Repair</h2>
-      <p class="section-sub">From routine maintenance to full diagnostics, our shop handles it — for domestic and import vehicles alike.</p>
+    <div class="services-header">
+      <div class="services-eyebrow">
+        <i class="fas fa-cog"></i>
+        OUR SERVICES
+      </div>
+      <h1 class="services-title">Everything Your <span class="highlight">CAR</span> Needs,<br>All in One Place.</h1>
+      <p class="services-subtitle">Preventive maintenance, precise diagnostics and complete repairs for domestic and imported vehicles.</p>
     </div>
 
     <div class="services-grid">
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-oil-can"></i></div>
-        <h3>Oil Change &amp; Maintenance</h3>
-        <p>Routine oil changes, fluid checks and scheduled maintenance to keep small issues from becoming big ones.</p>
+        <div class="service-image">
+          <img src="serviços/1.png" alt="General Mechanics">
+        </div>
+        <div class="service-content">
+          <h3>General Mechanics</h3>
+          <div class="service-icon"><i class="fas fa-wrench"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-compact-disc"></i></div>
-        <h3>Brakes</h3>
-        <p>Pads, rotors and full brake inspections — because stopping matters as much as going.</p>
+        <div class="service-image">
+          <img src="serviços/2.png" alt="Oil Change">
+        </div>
+        <div class="service-content">
+          <h3>Oil Change</h3>
+          <div class="service-icon"><i class="fas fa-tint"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-gears"></i></div>
-        <h3>Engine &amp; Transmission</h3>
-        <p>From tune-ups to major repairs, we diagnose engine and transmission issues correctly the first time.</p>
+        <div class="service-image">
+          <img src="serviços/3.png" alt="Catalytic System">
+        </div>
+        <div class="service-content">
+          <h3>Catalytic System</h3>
+          <div class="service-icon"><i class="fas fa-leaf"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-snowflake"></i></div>
-        <h3>A/C Repair</h3>
-        <p>Stay cool through the seasons with A/C diagnostics, recharge and repair.</p>
+        <div class="service-image">
+          <img src="serviços/4.png" alt="A/C Inspection">
+        </div>
+        <div class="service-content">
+          <h3>A/C Inspection</h3>
+          <div class="service-icon"><i class="fas fa-snowflake"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-arrows-left-right"></i></div>
-        <h3>Suspension &amp; Alignment</h3>
-        <p>Smoother rides and even tire wear with professional suspension and alignment service.</p>
+        <div class="service-image">
+          <img src="serviços/5.png" alt="Transmission Flush">
+        </div>
+        <div class="service-content">
+          <h3>Transmission Flush</h3>
+          <div class="service-icon"><i class="fas fa-cog"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-magnifying-glass-chart"></i></div>
-        <h3>Electronic Diagnostics</h3>
-        <p>Check engine light on? We pinpoint the issue with up-to-date diagnostic equipment.</p>
+        <div class="service-image">
+          <img src="serviços/6.png" alt="Front Axle">
+        </div>
+        <div class="service-content">
+          <h3>Front Axle</h3>
+          <div class="service-icon"><i class="fas fa-arrows"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-car-battery"></i></div>
-        <h3>Battery &amp; Electrical</h3>
-        <p>Battery testing, replacement and electrical system repair to keep everything powered up.</p>
+        <div class="service-image">
+          <img src="serviços/7.png" alt="Brakes and Repair">
+        </div>
+        <div class="service-content">
+          <h3>Brakes and Repair</h3>
+          <div class="service-icon"><i class="fas fa-hand-paper"></i></div>
+          <div class="service-bar"></div>
+        </div>
       </div>
+
       <div class="service-card">
-        <div class="service-icon"><i class="fas fa-clipboard-check"></i></div>
-        <h3>MA State Inspection</h3>
-        <p>Official Massachusetts state inspections, done right and explained clearly.</p>
+        <div class="service-image">
+          <img src="serviços/8.png" alt="Alignment and Balancing">
+        </div>
+        <div class="service-content">
+          <h3>Alignment and Balancing</h3>
+          <div class="service-icon"><i class="fas fa-compass"></i></div>
+          <div class="service-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="services-footer">
+      <div class="services-footer-item">
+        <div class="services-footer-icon"><i class="fas fa-users"></i></div>
+        <h4>Profissionais Especializados</h4>
+        <ul class="services-footer-list">
+          <li>Profissionais Especializados</li>
+          <li>Equipamentos Modernos</li>
+          <li>Garantia nos Serviços</li>
+        </ul>
+      </div>
+
+      <div class="services-footer-item">
+        <div class="services-footer-icon"><i class="fas fa-tools"></i></div>
+        <h4>Equipamentos Modernos</h4>
+        <ul class="services-footer-list">
+          <li>Profissionais Especializados</li>
+          <li>Equipamentos Modernos</li>
+          <li>Garantia nos Serviços</li>
+        </ul>
+      </div>
+
+      <div class="services-footer-item">
+        <div class="services-footer-icon"><i class="fas fa-check-circle"></i></div>
+        <h4>Garantia nos Serviços</h4>
+        <ul class="services-footer-list">
+          <li>Profissionais Especializados</li>
+          <li>Equipamentos Modernos</li>
+          <li>Garantia nos Serviços</li>
+        </ul>
+      </div>
+
+      <div class="services-cta">
+        <p>Não encontrou o serviço que procura?</p>
+        <button class="btn">Solicitar orçamento</button>
       </div>
     </div>
   </div>
@@ -882,85 +1743,12 @@
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
-<section id="contact">
-  <div class="container">
-    <div class="section-head">
-      <span class="eyebrow">Get In Touch</span>
-      <h2 class="section-title">Request a Quote</h2>
-      <p class="section-sub">Call, text or send a message — we'll get back to you fast.</p>
-    </div>
-
-    <div class="contact-grid">
-      <div>
-        <div class="contact-list">
-          <div class="contact-box">
-            <span class="icn"><i class="fas fa-phone-alt"></i></span>
-            <div>
-              <strong>Call the Shop</strong>
-              <a href="tel:19787702017">(978) 770-2017</a>
-            </div>
-          </div>
-          <div class="contact-box">
-            <span class="icn"><i class="fas fa-comment-dots"></i></span>
-            <div>
-              <strong>Call or Text</strong>
-              <a href="tel:18576159490">+1 (857) 615-9490</a>
-            </div>
-          </div>
-          <div class="contact-box">
-            <span class="icn"><i class="fas fa-envelope"></i></span>
-            <div>
-              <strong>Email</strong>
-              <a href="mailto:topcartewksbury@gmail.com">topcartewksbury@gmail.com</a>
-            </div>
-          </div>
-          <div class="contact-box">
-            <span class="icn"><i class="fas fa-map-marker-alt"></i></span>
-            <div>
-              <strong>Address</strong>
-              <span>53 Highlanderview Rd, Tewksbury, MA 01876</span>
-            </div>
-          </div>
-        </div>
-
-        <table class="hours-table">
-          <tr><td>Monday – Friday</td><td>8:00 AM – 5:00 PM</td></tr>
-          <tr><td>Saturday</td><td class="hours-closed">Closed</td></tr>
-          <tr><td>Sunday</td><td class="hours-closed">Closed</td></tr>
-        </table>
-      </div>
-
-      <form class="contact-form" id="quoteForm">
-        <div class="form-group">
-          <label class="form-label" for="name">Name</label>
-          <input class="form-input" type="text" id="name" name="name" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="phone">Phone</label>
-          <input class="form-input" type="tel" id="phone" name="phone" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="vehicle">Vehicle (Year / Make / Model)</label>
-          <input class="form-input" type="text" id="vehicle" name="vehicle" placeholder="e.g. 2018 Honda Civic">
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="message">What does your car need?</label>
-          <textarea class="form-textarea" id="message" name="message" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Send Request</button>
-        <p class="form-note">This opens your email app addressed to topcartewksbury@gmail.com. For faster service, call (978) 770-2017 directly.</p>
-      </form>
-    </div>
-  </div>
-</section>
-
 <!-- ===== FOOTER ===== -->
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div class="footer-logo">
-        <img src="assets/logo-footer.png" alt="Top Car Motor Sport logo">
+        <img src="assets/logo-header.png" alt="Top Car Motor Sport logo">
         <p>Local, honest auto repair in Tewksbury, MA. Fast, personal service since 2024 — from oil changes to full diagnostics.</p>
         <div class="social-circles" style="margin-top:20px;">
           <a href="#" class="social-item" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>

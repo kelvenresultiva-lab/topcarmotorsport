@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Car Design</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .car-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="car-container">
+        <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" width="800" height="400">
+            <!-- Background -->
+            <rect width="800" height="400" fill="#f9f9f9"/>
+
+            <!-- Car Body (semi-transparent white) -->
+            <ellipse cx="400" cy="200" rx="280" ry="150" fill="rgba(255,255,255,0.3)" stroke="#ccc" stroke-width="2"/>
+
+            <!-- Car Outline -->
+            <path d="M 150 250 Q 150 150 200 120 L 600 120 Q 650 150 650 250 L 150 250" fill="none" stroke="#999" stroke-width="3"/>
+
+            <!-- Windshield -->
+            <path d="M 220 140 L 580 140 Q 590 160 585 200" fill="rgba(200,220,255,0.4)" stroke="#666" stroke-width="1.5"/>
+
+            <!-- Windows -->
+            <ellipse cx="300" cy="170" rx="40" ry="35" fill="rgba(200,220,255,0.3)" stroke="#999" stroke-width="1"/>
+            <ellipse cx="500" cy="170" rx="40" ry="35" fill="rgba(200,220,255,0.3)" stroke="#999" stroke-width="1"/>
+
+            <!-- Engine -->
+            <g id="engine">
+                <rect x="180" y="110" width="100" height="80" fill="rgba(100,100,100,0.4)" stroke="#E30613" stroke-width="2" rx="5"/>
+                <circle cx="200" cy="135" r="8" fill="#E30613"/>
+                <circle cx="240" cy="135" r="8" fill="#E30613"/>
+                <circle cx="200" cy="165" r="8" fill="#E30613"/>
+                <circle cx="240" cy="165" r="8" fill="#E30613"/>
+                <text x="230" y="155" font-size="12" fill="#E30613" font-weight="bold" text-anchor="middle">ENGINE</text>
+            </g>
+
+            <!-- Transmission -->
+            <g id="transmission">
+                <rect x="320" y="140" width="80" height="60" fill="rgba(150,100,50,0.3)" stroke="#E30613" stroke-width="2" rx="4"/>
+                <text x="360" y="175" font-size="11" fill="#E30613" font-weight="bold" text-anchor="middle">GEARBOX</text>
+            </g>
+
+            <!-- Suspension Front Left -->
+            <g id="suspension-fl">
+                <line x1="220" y1="250" x2="220" y2="300" stroke="#0052CC" stroke-width="3"/>
+                <circle cx="220" cy="305" r="15" fill="rgba(0,0,0,0.2)" stroke="#333" stroke-width="2"/>
+                <text x="220" y="335" font-size="10" fill="#0052CC" font-weight="bold" text-anchor="middle">SUSPENSION</text>
+            </g>
+
+            <!-- Suspension Front Right -->
+            <g id="suspension-fr">
+                <line x1="580" y1="250" x2="580" y2="300" stroke="#0052CC" stroke-width="3"/>
+                <circle cx="580" cy="305" r="15" fill="rgba(0,0,0,0.2)" stroke="#333" stroke-width="2"/>
+            </g>
+
+            <!-- Wheels -->
+            <circle cx="220" cy="320" r="22" fill="none" stroke="#333" stroke-width="4"/>
+            <circle cx="220" cy="320" r="12" fill="rgba(50,50,50,0.5)"/>
+
+            <circle cx="580" cy="320" r="22" fill="none" stroke="#333" stroke-width="4"/>
+            <circle cx="580" cy="320" r="12" fill="rgba(50,50,50,0.5)"/>
+
+            <!-- Brakes (Red highlights at wheels) -->
+            <circle cx="220" cy="320" r="30" fill="none" stroke="#E30613" stroke-width="2" stroke-dasharray="5,5"/>
+            <circle cx="580" cy="320" r="30" fill="none" stroke="#E30613" stroke-width="2" stroke-dasharray="5,5"/>
+            <text x="220" y="365" font-size="10" fill="#E30613" font-weight="bold" text-anchor="middle">BRAKES</text>
+
+            <!-- Battery -->
+            <g id="battery">
+                <rect x="480" y="240" width="50" height="60" fill="rgba(255,200,0,0.3)" stroke="#E30613" stroke-width="2" rx="3"/>
+                <text x="505" y="260" font-size="10" fill="#E30613" font-weight="bold" text-anchor="middle">BATTERY</text>
+            </g>
+
+            <!-- AC System -->
+            <g id="ac">
+                <rect x="560" y="230" width="45" height="50" fill="rgba(100,200,255,0.3)" stroke="#0052CC" stroke-width="2" rx="3"/>
+                <text x="582" y="260" font-size="9" fill="#0052CC" font-weight="bold" text-anchor="middle">A/C</text>
+            </g>
+
+            <!-- Exhaust -->
+            <g id="exhaust">
+                <path d="M 150 270 Q 120 280 110 300" fill="none" stroke="#999" stroke-width="3"/>
+                <circle cx="105" cy="310" r="8" fill="none" stroke="#999" stroke-width="2"/>
+                <text x="90" y="330" font-size="10" fill="#666" font-weight="bold" text-anchor="middle">EXHAUST</text>
+            </g>
+
+            <!-- Fuel Tank -->
+            <g id="fuel">
+                <ellipse cx="400" cy="280" rx="35" ry="25" fill="rgba(200,100,100,0.3)" stroke="#E30613" stroke-width="2"/>
+                <text x="400" y="285" font-size="10" fill="#E30613" font-weight="bold" text-anchor="middle">FUEL</text>
+            </g>
+
+            <!-- Steering -->
+            <g id="steering">
+                <circle cx="400" cy="160" r="18" fill="none" stroke="#333" stroke-width="2"/>
+                <line x1="400" y1="145" x2="400" y2="175" stroke="#333" stroke-width="1.5"/>
+                <line x1="385" y1="160" x2="415" y2="160" stroke="#333" stroke-width="1.5"/>
+                <text x="400" y="205" font-size="10" fill="#333" font-weight="bold" text-anchor="middle">STEERING</text>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>
