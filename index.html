@@ -1081,30 +1081,33 @@
 
   @media (max-width: 640px){
     .gallery-carousel-grid{
-      overflow:hidden;
+      padding:0;
+      overflow:visible;
+      align-items:stretch;
     }
     .carousel-container-grid{
-      padding:0 10px;
+      display:flex;
+      flex-wrap:nowrap;
       gap:0;
-      scroll-snap-type:x mandatory;
+      scroll-snap-type:none !important;
       width:100%;
-      overflow-x:auto;
+      overflow-x:scroll;
       overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;
+      padding:0;
+      margin:0;
     }
     .carousel-container-grid::before,
     .carousel-container-grid::after{
       display:none;
     }
     .carousel-slide{
-      width:calc(100vw - 40px);
-      min-width:calc(100vw - 40px);
       height:360px;
-      margin:0 5px;
-      border-radius:16px;
-      box-shadow:0 10px 30px rgba(0,0,0,0.1);
-      scroll-snap-align:center;
-      scroll-snap-stop:always;
-      flex-shrink:0;
+      margin:0;
+      border-radius:0;
+      box-shadow:none;
+      flex:0 0 100%;
+      width:100%;
     }
     .carousel-slide.active{
       transform:scale(1);
@@ -2036,7 +2039,7 @@
     const slide = slides[index];
     const slideRect = slide.getBoundingClientRect();
     const containerRect = carousel.getBoundingClientRect();
-    const scrollPosition = carousel.scrollLeft + (slideRect.left - containerRect.left) - (containerRect.width - slideRect.width) / 2;
+    const scrollPosition = carousel.scrollLeft + (slideRect.left - containerRect.left);
 
     carousel.scrollTo({
       left: scrollPosition,
