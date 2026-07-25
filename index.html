@@ -1081,22 +1081,28 @@
 
   @media (max-width: 640px){
     .carousel-container-grid{
-      padding:0 20px;
-      gap:0;
+      padding:0;
+      gap:20px;
+      scroll-snap-type:x mandatory;
+      width:100vw;
+      margin-left:calc(-50vw + 50%);
     }
     .carousel-container-grid::before,
     .carousel-container-grid::after{
-      width:20%;
+      display:none;
     }
     .carousel-slide{
-      width:calc(90vw - 40px);
+      width:calc(100vw - 40px);
       height:360px;
-      margin:0 10px;
+      margin:0 20px;
       border-radius:16px;
       box-shadow:0 10px 30px rgba(0,0,0,0.1);
+      scroll-snap-align:center;
+      scroll-snap-stop:always;
+      flex-shrink:0;
     }
     .carousel-slide.active{
-      transform:scale(1.01);
+      transform:scale(1);
       box-shadow:0 15px 40px rgba(0,0,0,0.15);
     }
     .dot{
