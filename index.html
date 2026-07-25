@@ -127,67 +127,75 @@
     top:0;
     z-index:1000;
     background:var(--white);
-    height:var(--header-h);
-    box-shadow:0 2px 14px rgba(0,0,0,0.06);
+    height:auto;
+    padding:16px 0;
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
   }
   .site-header .container{
-    height:100%;
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:20px;
+    gap:24px;
   }
   .logo{
     display:flex;
     align-items:center;
     text-decoration:none;
     color:var(--black);
+    flex-shrink:0;
   }
   .logo img{
-    height:52px;
+    height:60px;
     width:auto;
     display:block;
   }
 
-  .main-nav{ display:flex; gap:32px; list-style:none; }
+  .main-nav{ display:flex; gap:40px; list-style:none; }
   .main-nav a{
     color:var(--black);
     text-decoration:none;
     font-family:'Rajdhani', sans-serif;
     font-weight:700;
-    font-size:14px;
-    letter-spacing:0.5px;
+    font-size:16px;
+    letter-spacing:0.8px;
     text-transform:uppercase;
     position:relative;
-    padding:6px 0;
+    padding:8px 0;
+    transition:color 0.3s ease;
   }
+  .main-nav a:hover{ color:var(--blue); }
   .main-nav a::after{
     content:"";
     position:absolute;
     left:0; bottom:0;
-    width:0; height:2px;
+    width:0; height:3px;
     background:var(--blue);
-    transition:width .25s ease;
+    transition:width .3s ease;
   }
   .main-nav a:hover::after{ width:100%; }
 
   .header-call{
     display:flex;
     align-items:center;
-    gap:10px;
+    gap:12px;
     color:var(--white);
     text-decoration:none;
     font-family:'Rajdhani', sans-serif;
+    flex-shrink:0;
   }
   .header-call .icn{
-    width:38px; height:38px;
+    width:44px; height:44px;
     border-radius:50%;
     background:var(--blue);
     display:flex; align-items:center; justify-content:center;
     flex-shrink:0;
+    font-size:18px;
+    box-shadow:0 2px 8px rgba(0,82,204,0.2);
+    transition:all 0.3s ease;
   }
-  .header-call .num{ font-weight:900; font-size:16px; display:block; color:var(--black); }
-  .header-call .lbl{ font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--gray-mid); }
+  .header-call:hover .icn{ transform:scale(1.1); box-shadow:0 4px 12px rgba(0,82,204,0.3); }
+  .header-call .num{ font-weight:900; font-size:18px; display:block; color:var(--black); }
+  .header-call .lbl{ font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--gray-mid); }
 
   .nav-toggle{
     display:none;
