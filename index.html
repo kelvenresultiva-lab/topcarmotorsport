@@ -326,7 +326,6 @@
     display:grid;
     grid-template-columns:repeat(4, 1fr);
     gap:15px 15px;
-    row-gap:-30px;
     margin-bottom:20px;
   }
   .brand-card{
@@ -1486,8 +1485,9 @@
     .services-eyebrow::after{ width:50px; }
     .services-title{ font-size:42px; line-height:1.4; margin-bottom:16px; }
     .services-subtitle{ font-size:14px; }
+    .brands-grid{ grid-template-columns:repeat(2, 1fr); }
     .brand-card{ min-height:80px; padding:20px 15px; }
-    .brand-card img{ height:100px; max-width:100px; }
+    .brand-card img{ height:auto; max-width:100%; }
     .about-grid{ grid-template-columns:1fr; gap:30px; }
     .about-stats-inline{ grid-template-columns:repeat(2, 1fr); gap:12px; }
     .why-grid{ grid-template-columns:1fr; gap:20px; }
@@ -1713,7 +1713,7 @@
         <img src="assets/audi.jpg" alt="Audi">
       </div>
       <div class="brand-card">
-        <img src="assets/vookswagen.jpg" alt="Volkswagen">
+        <img src="assets/volvo.png" alt="Volvo">
       </div>
       <div class="brand-card">
         <img src="assets/toyota.jpg" alt="Toyota">
