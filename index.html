@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18396763785"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18396763785');
+</script>
 <title>Top Car Motor Sport | Auto Repair in Tewksbury, MA</title>
 <meta name="description" content="Top Car Motor Sport — fast, personal auto repair in Tewksbury, MA. Oil changes, brakes, engine & transmission, A/C, diagnostics, MA state inspection and more.">
 
@@ -378,6 +388,13 @@
   .quote-submit:hover{ background:#003f9e; transform:translateY(-1px); }
   .quote-note{ text-align:center; color:#555; font-size:12px; margin-top:10px; }
   .m-only, .lead-m{ display:none; }
+  .quote-hp{ position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+  .quote-success{ text-align:center; padding:26px 8px; }
+  .quote-success i{ font-size:42px; color:var(--blue); margin-bottom:10px; }
+  .quote-success h3{ font-size:24px; margin-bottom:8px; color:var(--black); }
+  .quote-success p{ color:#3d4a63; font-size:14px; }
+  .quote-success a{ color:var(--blue); font-weight:700; }
+  .quote-submit:disabled{ opacity:0.7; cursor:wait; }
 
   /* ===== END-OF-SECTION CTA (call + WhatsApp) ===== */
   .section-cta{
@@ -1806,10 +1823,16 @@
             <label for="message"><span class="d-only">What car do you have and what do you need?</span><span class="m-only">Your car &amp; service needed</span></label>
             <textarea id="message" name="message" rows="2" placeholder="e.g. 2018 Honda Civic — oil change" required></textarea>
           </div>
+          <input type="text" name="website" id="quoteWebsite" class="quote-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <p class="quote-error" id="quoteError" role="alert" hidden>Please fill in all fields.</p>
-          <button type="submit" class="quote-submit">Request a Quote <i class="fas fa-arrow-right"></i></button>
+          <button type="submit" class="quote-submit" id="quoteSubmit">Request a Quote <i class="fas fa-arrow-right"></i></button>
           <p class="quote-note">Send anytime. We'll <span class="d-only">get back to you</span><span class="m-only">reply</span> during business hours.</p>
         </form>
+        <div class="quote-success" id="quoteSuccess" role="status" hidden>
+          <i class="fas fa-circle-check"></i>
+          <h3>Thank you!</h3>
+          <p>We received your request and will contact you during business hours. Need us sooner? Call <a href="tel:+19787702017">(978) 770-2017</a>.</p>
+        </div>
       </div>
 
       <div class="hero-trust">
@@ -2460,7 +2483,10 @@
     initCarousel();
   }
 
-  // Contact form -> opens email client with prefilled message
+  // Paste the Google Apps Script "Web app" URL here to send leads to the Google Sheet
+  const LEADS_ENDPOINT = '';
+
+  // Quote form -> Google Sheet (or email app until the endpoint is set)
   const quoteForm = document.getElementById('quoteForm');
   if (quoteForm) {
     quoteForm.addEventListener('submit', function(e){
@@ -2475,14 +2501,39 @@
       document.getElementById('quoteError').hidden = ok;
       if (!ok) return;
       const [name, phone, message] = fields.map(f => f.value.trim());
-      const subject = encodeURIComponent('Quote Request from ' + name);
-      const body = encodeURIComponent(
-        'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n\n' +
-        'Car / what they need:\n' + message
-      );
-      window.location.href = 'mailto:topcartewksbury@gmail.com?subject=' + subject + '&body=' + body;
+
+      // Bot trap: real visitors never fill this hidden field
+      if (document.getElementById('quoteWebsite').value) { showQuoteSuccess(); return; }
+
+      // No endpoint configured yet -> fall back to the visitor's email app
+      if (!LEADS_ENDPOINT) {
+        const subject = encodeURIComponent('Quote Request from ' + name);
+        const body = encodeURIComponent(
+          'Name: ' + name + '\n' +
+          'Phone: ' + phone + '\n\n' +
+          'Car / what they need:\n' + message
+        );
+        window.location.href = 'mailto:topcartewksbury@gmail.com?subject=' + subject + '&body=' + body;
+        return;
+      }
+
+      const btn = document.getElementById('quoteSubmit');
+      btn.disabled = true;
+      const data = new URLSearchParams({ name, phone, message, source: location.href });
+      fetch(LEADS_ENDPOINT, { method: 'POST', body: data, mode: 'no-cors' })
+        .then(showQuoteSuccess)
+        .catch(() => {
+          btn.disabled = false;
+          const err = document.getElementById('quoteError');
+          err.textContent = 'Something went wrong. Please call us at (978) 770-2017.';
+          err.hidden = false;
+        });
     });
+  }
+
+  function showQuoteSuccess(){
+    quoteForm.hidden = true;
+    document.getElementById('quoteSuccess').hidden = false;
   }
 
 </script>
