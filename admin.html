@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Leads | Top Car Motor Sport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{ --blue:#0052CC; --blue-dark:#003f9e; --bg:#f4f6fa; --ink:#0d1117; --muted:#5b6475; --line:#dde3ee; --green:#25D366; --red:#dc143c; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ font-family:'Roboto', sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; }
+  h1,h2,h3{ font-family:'Rajdhani', sans-serif; text-transform:uppercase; }
+  button{ font:inherit; cursor:pointer; }
+  [hidden]{ display:none !important; }
+
+  .login-wrap{ min-height:100vh; display:grid; place-items:center; padding:20px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:28px; box-shadow:0 14px 40px rgba(0,82,204,0.10); }
+  .login-card{ width:100%; max-width:380px; }
+  .login-card h1{ font-size:28px; margin-bottom:4px; }
+  .login-card p{ color:var(--muted); font-size:14px; margin-bottom:18px; }
+  label{ display:block; font-family:'Rajdhani', sans-serif; font-weight:700; font-size:14px; margin:12px 0 5px; }
+  input[type=email], input[type=password], input[type=search], select{
+    width:100%; padding:11px 12px; border:1px solid #c9d3e6; border-radius:8px; font:inherit; background:#fff;
+  }
+  input:focus, select:focus{ outline:2px solid var(--blue); outline-offset:1px; }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; border:none; border-radius:8px; font-family:'Rajdhani', sans-serif; font-weight:700; letter-spacing:.5px; text-transform:uppercase; text-decoration:none; font-size:14px; }
+  .btn-primary{ background:var(--blue); color:#fff; width:100%; margin-top:18px; padding:13px; }
+  .btn-primary:hover{ background:var(--blue-dark); }
+  .btn-ghost{ background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .btn-ghost:hover{ border-color:var(--blue); color:var(--blue); }
+  .msg{ font-size:13px; margin-top:12px; color:var(--red); }
+  .setup{ background:#fff7e6; border:1px solid #f3d9a4; padding:12px; border-radius:8px; font-size:13px; margin-top:14px; }
+
+  header.bar{ background:#fff; border-bottom:1px solid var(--line); padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; position:sticky; top:0; z-index:5; }
+  header.bar h1{ font-size:22px; }
+  header.bar .who{ color:var(--muted); font-size:13px; margin-right:10px; }
+  main{ max-width:1100px; margin:0 auto; padding:20px; }
+  .stats{ display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:16px; }
+  .stat{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+  .stat b{ display:block; font-family:'Rajdhani', sans-serif; font-size:28px; }
+  .stat span{ color:var(--muted); font-size:13px; }
+  .tools{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .tools input[type=search]{ flex:1 1 220px; }
+  .tools select{ width:auto; }
+  .lead{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:10px; display:grid; grid-template-columns:1.1fr 2fr auto; gap:14px; align-items:start; }
+  .lead.is-new{ border-left:4px solid var(--blue); }
+  .lead h3{ font-size:20px; text-transform:none; }
+  .lead .when{ color:var(--muted); font-size:12px; margin-top:2px; }
+  .lead .phone{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-size:13px; font-weight:500; text-decoration:none; border:1px solid var(--line); color:var(--ink); }
+  .chip.wa{ background:var(--green); border-color:var(--green); color:#fff; }
+  .chip.call{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .lead .text{ white-space:pre-wrap; word-break:break-word; font-size:15px; }
+  .lead .actions{ display:flex; flex-direction:column; gap:8px; min-width:140px; }
+  .del{ background:none; border:none; color:var(--red); font-size:12px; text-align:left; padding:0; }
+  .empty{ text-align:center; color:var(--muted); padding:40px 10px; }
+  @media (max-width:760px){
+    .stats{ grid-template-columns:repeat(2, 1fr); }
+    .lead{ grid-template-columns:1fr; }
+    .lead .actions{ flex-direction:row; align-items:center; justify-content:space-between; }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginView">
+  <div class="card login-card">
+    <h1>Leads</h1>
+    <p>Top Car Motor Sport &middot; owner access</p>
+    <form id="loginForm">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" autocomplete="username" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" autocomplete="current-password" required>
+      <button class="btn btn-primary" type="submit">Sign in</button>
+      <p class="msg" id="loginMsg" hidden></p>
+    </form>
+    <div class="setup" id="setupNote" hidden>Not connected yet: fill in <b>leads-config.js</b> with the Supabase URL and anon key.</div>
+  </div>
+</div>
+
+<div id="appView" hidden>
+  <header class="bar">
+    <h1>Leads</h1>
+    <div>
+      <span class="who" id="who"></span>
+      <button class="btn btn-ghost" id="refreshBtn" type="button">Refresh</button>
+      <button class="btn btn-ghost" id="csvBtn" type="button">Export CSV</button>
+      <button class="btn btn-ghost" id="logoutBtn" type="button">Sign out</button>
+    </div>
+  </header>
+  <main>
+    <div class="stats">
+      <div class="stat"><b id="sTotal">0</b><span>Total leads</span></div>
+      <div class="stat"><b id="sNew">0</b><span>New</span></div>
+      <div class="stat"><b id="sContacted">0</b><span>Contacted</span></div>
+      <div class="stat"><b id="sClosed">0</b><span>Closed</span></div>
+    </div>
+    <div class="tools">
+      <input type="search" id="search" placeholder="Search name, phone or message">
+      <select id="filter">
+        <option value="">All statuses</option>
+        <option value="new">New</option>
+        <option value="contacted">Contacted</option>
+        <option value="closed">Closed</option>
+      </select>
+    </div>
+    <div id="list"></div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="leads-config.js"></script>
+<script>
+(function(){
+  const cfg = window.LEADS_CONFIG || {};
+  const $ = id => document.getElementById(id);
+  let db = null, leads = [];
+
+  if (!cfg.url || !cfg.anonKey) { $('setupNote').hidden = false; }
+  else { db = supabase.createClient(cfg.url, cfg.anonKey); init(); }
+
+  function showApp(user){
+    $('loginView').hidden = true; $('appView').hidden = false;
+    $('who').textContent = user.email;
+    load();
+  }
+  function showLogin(){ $('appView').hidden = true; $('loginView').hidden = false; }
+
+  async function init(){
+    const { data } = await db.auth.getSession();
+    if (data.session) showApp(data.session.user); else showLogin();
+  }
+
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!db) return;
+    const msg = $('loginMsg'); msg.hidden = true;
+    const { data, error } = await db.auth.signInWithPassword({ email: $('email').value.trim(), password: $('password').value });
+    if (error) { msg.textContent = 'Wrong e-mail or password.'; msg.hidden = false; return; }
+    $('password').value = '';
+    showApp(data.user);
+  });
+
+  $('logoutBtn').addEventListener('click', async () => { await db.auth.signOut(); leads = []; showLogin(); });
+  $('refreshBtn').addEventListener('click', load);
+  $('search').addEventListener('input', render);
+  $('filter').addEventListener('change', render);
+
+  async function load(){
+    const { data, error } = await db.from('leads').select('*').order('created_at', { ascending:false }).limit(1000);
+    if (error) { $('list').innerHTML = ''; const d = document.createElement('div'); d.className = 'empty'; d.textContent = 'Could not load leads (' + error.message + ').'; $('list').appendChild(d); return; }
+    leads = data; render();
+  }
+
+  function digits(p){ let d = String(p).replace(/\D/g, ''); if (d.length === 10) d = '1' + d; return d; }
+
+  function render(){
+    const q = $('search').value.trim().toLowerCase(), f = $('filter').value;
+    $('sTotal').textContent = leads.length;
+    ['new','contacted','closed'].forEach(s => { $('s' + s[0].toUpperCase() + s.slice(1)).textContent = leads.filter(l => l.status === s).length; });
+
+    const rows = leads.filter(l => (!f || l.status === f) && (!q || (l.name + ' ' + l.phone + ' ' + l.message).toLowerCase().includes(q)));
+    const list = $('list'); list.textContent = '';
+    if (!rows.length) { const d = document.createElement('div'); d.className = 'empty'; d.textContent = leads.length ? 'No leads match this filter.' : 'No leads yet. They will appear here as soon as someone fills the form.'; list.appendChild(d); return; }
+
+    rows.forEach(l => {
+      const el = document.createElement('div'); el.className = 'lead' + (l.status === 'new' ? ' is-new' : '');
+
+      const c1 = document.createElement('div');
+      const h = document.createElement('h3'); h.textContent = l.name;
+      const when = document.createElement('div'); when.className = 'when'; when.textContent = new Date(l.created_at).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' });
+      const ph = document.createElement('div'); ph.className = 'phone';
+      const call = document.createElement('a'); call.className = 'chip call'; call.href = 'tel:+' + digits(l.phone); call.textContent = l.phone;
+      const wa = document.createElement('a'); wa.className = 'chip wa'; wa.target = '_blank'; wa.rel = 'noopener';
+      wa.href = 'https://wa.me/' + digits(l.phone) + '?text=' + encodeURIComponent('Hi ' + l.name + ', this is Top Car Motor Sport about your quote request.');
+      wa.textContent = 'WhatsApp';
+      ph.append(call, wa); c1.append(h, when, ph);
+
+      const c2 = document.createElement('div'); c2.className = 'text'; c2.textContent = l.message;
+
+      const c3 = document.createElement('div'); c3.className = 'actions';
+      const sel = document.createElement('select');
+      [['new','New'],['contacted','Contacted'],['closed','Closed']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if (l.status === v) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', async () => {
+        const { error } = await db.from('leads').update({ status: sel.value }).eq('id', l.id);
+        if (error) { alert('Could not update: ' + error.message); sel.value = l.status; return; }
+        l.status = sel.value; render();
+      });
+      const del = document.createElement('button'); del.className = 'del'; del.type = 'button'; del.textContent = 'Delete lead';
+      del.addEventListener('click', async () => {
+        if (!confirm('Delete the lead from ' + l.name + '? This cannot be undone.')) return;
+        const { error } = await db.from('leads').delete().eq('id', l.id);
+        if (error) { alert('Could not delete: ' + error.message); return; }
+        leads = leads.filter(x => x.id !== l.id); render();
+      });
+      c3.append(sel, del);
+
+      el.append(c1, c2, c3); list.appendChild(el);
+    });
+  }
+
+  $('csvBtn').addEventListener('click', () => {
+    const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const safe = v => /^[=+\-@]/.test(String(v)) ? "'" + v : v;
+    const rows = [['Date','Name','Phone','Message','Status']].concat(leads.map(l => [l.created_at, safe(l.name), safe(l.phone), safe(l.message), l.status]));
+    const blob = new Blob([rows.map(r => r.map(esc).join(',')).join('\n')], { type:'text/csv;charset=utf-8' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'top-car-leads.csv'; a.click(); URL.revokeObjectURL(a.href);
+  });
+})();
+</script>
+</body>
+</html>

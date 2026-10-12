@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Google tag (gtag.js) -->
+<script src="leads-config.js"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18396763785"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -1812,16 +1813,16 @@
           <div class="quote-row">
             <div class="quote-field">
               <label for="name">Name</label>
-              <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" required>
+              <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" maxlength="120" required>
             </div>
             <div class="quote-field">
               <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" placeholder="(978) 000-0000" autocomplete="tel" inputmode="tel" required>
+              <input type="tel" id="phone" name="phone" placeholder="(978) 000-0000" autocomplete="tel" inputmode="tel" minlength="5" maxlength="40" required>
             </div>
           </div>
           <div class="quote-field">
             <label for="message"><span class="d-only">What car do you have and what do you need?</span><span class="m-only">Your car &amp; service needed</span></label>
-            <textarea id="message" name="message" rows="2" placeholder="e.g. 2018 Honda Civic — oil change" required></textarea>
+            <textarea id="message" name="message" rows="2" placeholder="e.g. 2018 Honda Civic — oil change" maxlength="1000" required></textarea>
           </div>
           <input type="text" name="website" id="quoteWebsite" class="quote-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
           <p class="quote-error" id="quoteError" role="alert" hidden>Please fill in all fields.</p>
@@ -2483,10 +2484,21 @@
     initCarousel();
   }
 
-  // Paste the Google Apps Script "Web app" URL here to send leads to the Google Sheet
-  const LEADS_ENDPOINT = '';
+  // Google Ads conversion: WhatsApp button clicks ("Contato")
+  document.querySelectorAll('.btn-whatsapp').forEach(function(a){
+    a.addEventListener('click', function(){
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-18396763785/V3sPCJeY45kdEImtocRE',
+          'value': 1.0,
+          'currency': 'USD'
+        });
+      }
+    });
+  });
 
-  // Quote form -> Google Sheet (or email app until the endpoint is set)
+  // Quote form -> Supabase "leads" table (see leads-config.js); email app as fallback until configured
+  const LEADS_CFG = window.LEADS_CONFIG || {};
   const quoteForm = document.getElementById('quoteForm');
   if (quoteForm) {
     quoteForm.addEventListener('submit', function(e){
@@ -2498,15 +2510,17 @@
         f.parentElement.classList.toggle('invalid', empty);
         if (empty) ok = false;
       });
-      document.getElementById('quoteError').hidden = ok;
+      const quoteErr = document.getElementById('quoteError');
+      quoteErr.textContent = 'Please fill in all fields.';
+      quoteErr.hidden = ok;
       if (!ok) return;
       const [name, phone, message] = fields.map(f => f.value.trim());
 
       // Bot trap: real visitors never fill this hidden field
       if (document.getElementById('quoteWebsite').value) { showQuoteSuccess(); return; }
 
-      // No endpoint configured yet -> fall back to the visitor's email app
-      if (!LEADS_ENDPOINT) {
+      // Not configured yet -> fall back to the visitor's email app
+      if (!LEADS_CFG.url || !LEADS_CFG.anonKey) {
         const subject = encodeURIComponent('Quote Request from ' + name);
         const body = encodeURIComponent(
           'Name: ' + name + '\n' +
@@ -2519,9 +2533,16 @@
 
       const btn = document.getElementById('quoteSubmit');
       btn.disabled = true;
-      const data = new URLSearchParams({ name, phone, message, source: location.href });
-      fetch(LEADS_ENDPOINT, { method: 'POST', body: data, mode: 'no-cors' })
-        .then(showQuoteSuccess)
+      fetch(LEADS_CFG.url.replace(/\/$/, '') + '/rest/v1/leads', {
+        method: 'POST',
+        headers: Object.assign({
+          'Content-Type': 'application/json',
+          'apikey': LEADS_CFG.anonKey,
+          'Prefer': 'return=minimal'
+        }, LEADS_CFG.anonKey.startsWith('eyJ') ? { 'Authorization': 'Bearer ' + LEADS_CFG.anonKey } : {}),
+        body: JSON.stringify({ name, phone, message, source: location.href.slice(0, 300) })
+      })
+        .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); showQuoteSuccess(); })
         .catch(() => {
           btn.disabled = false;
           const err = document.getElementById('quoteError');
