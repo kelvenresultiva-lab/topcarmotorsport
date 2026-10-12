@@ -66,6 +66,29 @@
   .lead:hover{ border-color:var(--blue); box-shadow:0 6px 20px rgba(0,82,204,0.10); }
   .lead .text{ display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
   .lead .more{ display:block; margin-top:6px; color:var(--blue); font-size:12px; font-weight:700; }
+  .views{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#fff; }
+  .views button{ border:none; background:#fff; padding:9px 16px; font-family:'Rajdhani', sans-serif; font-weight:700; text-transform:uppercase; font-size:14px; color:var(--muted); }
+  .views button.on{ background:var(--blue); color:#fff; }
+  .board{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; align-items:start; }
+  .col{ background:#e9eef7; border-radius:14px; padding:10px; min-height:220px; border:2px solid transparent; }
+  .col.over{ border-color:var(--blue); background:#dde8fb; }
+  .col-head{ display:flex; align-items:center; justify-content:space-between; padding:6px 6px 10px; font-family:'Rajdhani', sans-serif; font-weight:700; text-transform:uppercase; font-size:16px; letter-spacing:.5px; }
+  .col-head .n{ background:#fff; border-radius:999px; padding:1px 10px; font-size:13px; color:var(--muted); }
+  .col[data-status=new] .col-head{ color:var(--blue); }
+  .col[data-status=contacted] .col-head{ color:#b26a00; }
+  .col[data-status=closed] .col-head{ color:#2a7d3f; }
+  .kcard{ background:#fff; border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; cursor:grab; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+  .kcard:hover{ border-color:var(--blue); }
+  .kcard.dragging{ opacity:.45; }
+  .kcard h3{ font-size:17px; text-transform:none; }
+  .kcard .when{ color:var(--muted); font-size:11px; margin-top:1px; }
+  .kcard .kmsg{ font-size:13px; margin-top:8px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; word-break:break-word; }
+  .kcard .kfoot{ display:flex; align-items:center; justify-content:space-between; margin-top:10px; gap:6px; }
+  .kcard .chip{ padding:4px 9px; font-size:12px; }
+  .mv{ display:flex; gap:4px; }
+  .mv button{ border:1px solid var(--line); background:#fff; border-radius:6px; width:28px; height:26px; font-size:14px; color:var(--muted); }
+  .mv button:hover{ border-color:var(--blue); color:var(--blue); }
+  .col-empty{ text-align:center; color:var(--muted); font-size:12px; padding:18px 6px; }
   .overlay{ position:fixed; inset:0; background:rgba(8,14,28,0.6); display:flex; align-items:center; justify-content:center; padding:16px; z-index:20; }
   .modal{ background:#fff; border-radius:16px; width:100%; max-width:560px; max-height:92vh; overflow:auto; padding:26px; position:relative; box-shadow:0 24px 70px rgba(0,0,0,0.35); }
   .modal h2{ font-size:28px; text-transform:none; padding-right:34px; }
@@ -80,6 +103,10 @@
   .m-status select{ width:auto; }
   .m-foot .del{ margin-left:auto; }
   .m-src{ margin-top:16px; color:var(--muted); font-size:11px; word-break:break-all; }
+  @media (max-width:900px){
+    .board{ grid-template-columns:1fr; }
+    .col{ min-height:0; }
+  }
   @media (max-width:760px){
     .count{ margin-left:0; width:100%; }
     .stats{ grid-template-columns:repeat(2, 1fr); }
@@ -146,8 +173,13 @@
       <label class="dl">To <input type="date" id="dTo"></label>
       <button class="btn btn-ghost" id="clearFilters" type="button">Clear filters</button>
       <span class="count" id="resultCount"></span>
+      <div class="views" role="group" aria-label="View">
+        <button type="button" id="vList" class="on">List</button>
+        <button type="button" id="vBoard">Kanban</button>
+      </div>
     </div>
     <div id="list"></div>
+    <div id="board" class="board" hidden></div>
   </main>
 </div>
 
@@ -253,6 +285,9 @@
     const rows = leads.filter(l => (!f || l.status === f) && inRange(l) && (!q || (l.name + ' ' + l.phone + ' ' + l.message).toLowerCase().includes(q)));
     shown = rows;
     $('resultCount').textContent = rows.length === leads.length ? '' : rows.length + ' of ' + leads.length + ' leads';
+    $('vList').classList.toggle('on', view === 'list'); $('vBoard').classList.toggle('on', view === 'board');
+    $('list').hidden = view === 'board'; $('board').hidden = view !== 'board';
+    if (view === 'board') { renderBoard(rows); return; }
     const list = $('list'); list.textContent = '';
     if (!rows.length) { const d = document.createElement('div'); d.className = 'empty'; d.textContent = leads.length ? 'No leads match this filter.' : 'No leads yet. They will appear here as soon as someone fills the form.'; list.appendChild(d); return; }
 
@@ -295,6 +330,62 @@
       c3.append(sel, del);
 
       el.append(c1, c2, c3); list.appendChild(el);
+    });
+  }
+
+  // ---- kanban ----
+  const STAGES = [['new', 'New'], ['contacted', 'Contacted'], ['closed', 'Closed']];
+  let view = 'list';
+  try { view = localStorage.getItem('leadsView') === 'board' ? 'board' : 'list'; } catch (e) {}
+  function setView(v){ view = v; try { localStorage.setItem('leadsView', v); } catch (e) {} render(); }
+  $('vList').addEventListener('click', () => setView('list'));
+  $('vBoard').addEventListener('click', () => setView('board'));
+
+  async function moveLead(l, status){
+    if (l.status === status) return;
+    const prev = l.status; l.status = status; render();
+    const { error } = await db.from('leads').update({ status }).eq('id', l.id);
+    if (error) { l.status = prev; render(); alert('Could not move lead: ' + error.message); }
+  }
+
+  function renderBoard(rows){
+    const board = $('board'); board.textContent = '';
+    STAGES.forEach(([key, label], idx) => {
+      const items = rows.filter(l => l.status === key);
+      const col = document.createElement('div'); col.className = 'col'; col.dataset.status = key;
+      const head = document.createElement('div'); head.className = 'col-head';
+      const t = document.createElement('span'); t.textContent = label;
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = items.length;
+      head.append(t, n); col.appendChild(head);
+
+      col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('over'); });
+      col.addEventListener('dragleave', e => { if (!col.contains(e.relatedTarget)) col.classList.remove('over'); });
+      col.addEventListener('drop', e => {
+        e.preventDefault(); col.classList.remove('over');
+        const id = e.dataTransfer.getData('text/plain'), l = leads.find(x => x.id === id);
+        if (l) moveLead(l, key);
+      });
+
+      if (!items.length) { const em = document.createElement('div'); em.className = 'col-empty'; em.textContent = 'No leads here'; col.appendChild(em); }
+
+      items.forEach(l => {
+        const c = document.createElement('div'); c.className = 'kcard'; c.draggable = true;
+        c.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', l.id); e.dataTransfer.effectAllowed = 'move'; c.classList.add('dragging'); });
+        c.addEventListener('dragend', () => c.classList.remove('dragging'));
+        c.addEventListener('click', e => { if (e.target.closest('a, button')) return; openLead(l); });
+
+        const h = document.createElement('h3'); h.textContent = l.name;
+        const w = document.createElement('div'); w.className = 'when'; w.textContent = new Date(l.created_at).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' });
+        const m = document.createElement('div'); m.className = 'kmsg'; m.textContent = l.message;
+        const f = document.createElement('div'); f.className = 'kfoot';
+        const call = document.createElement('a'); call.className = 'chip call'; call.href = 'tel:+' + digits(l.phone); call.textContent = l.phone;
+        const mv = document.createElement('div'); mv.className = 'mv';
+        if (idx > 0) { const b = document.createElement('button'); b.type = 'button'; b.title = 'Move to ' + STAGES[idx - 1][1]; b.textContent = '←'; b.addEventListener('click', () => moveLead(l, STAGES[idx - 1][0])); mv.appendChild(b); }
+        if (idx < STAGES.length - 1) { const b = document.createElement('button'); b.type = 'button'; b.title = 'Move to ' + STAGES[idx + 1][1]; b.textContent = '→'; b.addEventListener('click', () => moveLead(l, STAGES[idx + 1][0])); mv.appendChild(b); }
+        f.append(call, mv);
+        c.append(h, w, m, f); col.appendChild(c);
+      });
+      board.appendChild(col);
     });
   }
 
