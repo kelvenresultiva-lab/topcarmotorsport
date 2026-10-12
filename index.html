@@ -317,6 +317,177 @@
   }
   .hero-trust i{ color:var(--blue); font-size:16px; }
 
+  /* ===== QUOTE FORM ===== */
+  .quote-card{
+    background:rgba(255,255,255,0.97);
+    border:1px solid #e3e6ec;
+    border-radius:18px;
+    padding:26px 30px 22px;
+    box-shadow:0 18px 50px rgba(0,0,0,0.10);
+    max-width:620px;
+    margin-bottom:34px;
+  }
+  .quote-title{ font-size:28px; margin-bottom:4px; color:var(--black); }
+  .quote-sub{ color:#444; font-size:14px; margin-bottom:18px; }
+  .quote-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .quote-field{ margin-bottom:14px; }
+  .quote-field label{
+    display:block;
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:6px;
+    color:var(--black);
+  }
+  .quote-field input,
+  .quote-field textarea{
+    width:100%;
+    font:inherit;
+    font-size:15px;
+    padding:12px 14px;
+    border:1px solid #cfd4dc;
+    border-radius:8px;
+    background:#fff;
+    color:var(--black);
+    resize:vertical;
+  }
+  .quote-field input:focus,
+  .quote-field textarea:focus{ outline:2px solid var(--blue); outline-offset:1px; border-color:var(--blue); }
+  .quote-field.invalid input,
+  .quote-field.invalid textarea{ border-color:#dc143c; }
+  .quote-error{ color:#dc143c; font-size:13px; margin-bottom:10px; }
+  .quote-submit{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    background:var(--blue);
+    color:var(--white);
+    border:none;
+    border-radius:8px;
+    padding:15px;
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background 200ms ease, transform 200ms ease;
+  }
+  .quote-submit:hover{ background:#003f9e; transform:translateY(-1px); }
+  .quote-note{ text-align:center; color:#555; font-size:12px; margin-top:10px; }
+  .m-only, .lead-m{ display:none; }
+
+  /* ===== END-OF-SECTION CTA (call + WhatsApp) ===== */
+  .section-cta{
+    margin-top:44px;
+    text-align:center;
+  }
+  .section-cta-text{
+    font-family:'Rajdhani', sans-serif;
+    font-weight:700;
+    font-size:20px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    color:var(--black);
+    margin-bottom:16px;
+  }
+  .section-cta-btns{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:14px;
+  }
+  .btn-whatsapp{ background:#25D366; color:#fff; }
+  .btn-whatsapp:hover{ background:#1ebe5a; transform:scale(1.05); }
+  .section-cta.on-dark .section-cta-text{ color:#fff; }
+  @media (max-width: 640px){
+    .section-cta{ margin-top:32px; }
+    .section-cta-text{ font-size:17px; }
+    .section-cta-btns{ flex-direction:column; align-items:stretch; }
+    .section-cta-btns .btn{ width:100%; }
+  }
+  @media (min-width: 641px){
+    .hero .hero-actions{ display:none; }
+    .hero{ padding:110px 0 60px; }
+    /* soft blue wash so the page matches the blue car */
+    .hero-bg::after{
+      display:block;
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(100deg, #f6f9ff 0%, #eaf2ff 55%, #f1f6ff 100%);
+      mix-blend-mode:multiply;
+      pointer-events:none;
+    }
+    .quote-card{
+      background:rgba(255,255,255,0.88);
+      backdrop-filter:blur(6px);
+      border:1px solid #cfdcf3;
+      box-shadow:0 22px 55px rgba(0,82,204,0.16);
+    }
+    .quote-sub{ color:#3d4a63; }
+    .quote-field input,
+    .quote-field textarea{
+      background:#f4f8ff;
+      border-color:#c9d8f0;
+    }
+    .quote-field input:focus,
+    .quote-field textarea:focus{
+      background:#fff;
+      outline:none;
+      box-shadow:0 0 0 3px rgba(0,82,204,0.22);
+    }
+    .quote-submit{
+      background:linear-gradient(180deg, #0a5de0 0%, #0049b8 100%);
+      box-shadow:0 10px 24px rgba(0,82,204,0.35);
+    }
+    .quote-submit:hover{ background:linear-gradient(180deg, #0f68f0 0%, #0052cc 100%); }
+    .quote-note{ color:#4a5878; margin-top:8px; }
+    /* compact sizing so the whole hero fits one screen */
+    .hero{ padding:100px 0 36px; min-height:0; }
+    .hero-badge{ margin-bottom:14px; }
+    .hero h1{ font-size:46px; margin-bottom:14px; }
+    .hero p.lead{ font-size:15px; margin-bottom:18px; }
+    .quote-card{ max-width:560px; padding:18px 24px 16px; margin-bottom:22px; border-radius:16px; }
+    .quote-title{ font-size:24px; }
+    .quote-sub{ font-size:13px; margin-bottom:12px; }
+    .quote-row{ gap:14px; }
+    .quote-field{ margin-bottom:10px; }
+    .quote-field label{ font-size:13px; margin-bottom:4px; }
+    .quote-field input,
+    .quote-field textarea{ padding:9px 12px; font-size:14px; }
+    .quote-field textarea{ min-height:52px; }
+    .quote-submit{ padding:12px; font-size:15px; }
+    .hero{ padding:88px 0 24px; }
+    .hero-badge{ margin-bottom:10px; padding:4px 12px; font-size:11px; }
+    .hero h1{ font-size:40px; margin-bottom:10px; }
+    .hero p.lead{ font-size:14px; margin-bottom:14px; max-width:480px; }
+    .quote-card{ max-width:470px; padding:14px 18px 12px; margin-bottom:16px; }
+    .quote-title{ font-size:20px; margin-bottom:2px; }
+    .quote-sub{ font-size:12px; margin-bottom:8px; }
+    .quote-row{ gap:10px; }
+    .quote-field{ margin-bottom:7px; }
+    .quote-field label{ font-size:12px; margin-bottom:3px; }
+    .quote-field input,
+    .quote-field textarea{ padding:7px 10px; font-size:13px; }
+    .quote-field textarea{ min-height:40px; }
+    .quote-submit{ padding:10px; font-size:13px; }
+    .quote-note{ font-size:11px; margin-top:6px; }
+    .hero-trust div{ font-size:11px; }
+    .hero .container > div{ max-width:620px !important; }
+    .hero-trust{ gap:8px 18px; }
+    .hero h1 .accent{ display:block; }
+    .scan-line{ display:none; }
+    .hero-trust{ gap:12px 22px; }
+    .hero-trust div{ font-size:12px; }
+  }
+  @media (max-width: 640px){
+    .quote-row{ grid-template-columns:1fr; gap:0; }
+    .quote-title{ font-size:24px; }
+  }
+
   /* ===== BRANDS ===== */
   .brands-section{
     background:transparent;
@@ -784,6 +955,15 @@
     grid-template-columns:repeat(4, 1fr);
     gap:24px;
     margin-bottom:80px;
+  }
+  @media (min-width: 1025px){
+    /* center every row, including the incomplete last one */
+    .services-grid{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .services-grid > .service-card{ flex:0 0 calc((100% - 72px) / 4); }
   }
   .service-card{
     border-radius:12px;
@@ -1508,6 +1688,51 @@
     .pulse, .scan-line{ animation:none; }
     *{ transition:none !important; }
   }
+
+  /* ===== MOBILE HERO WITH QUOTE FORM (keep last) ===== */
+  @media (max-width: 640px){
+    .d-only, .lead-d, .quote-sub, .hero .hero-actions{ display:none !important; }
+    .m-only{ display:inline; }
+    .lead-m{ display:block; }
+    .hero{
+      display:block;
+      padding:28px 0 calc(86vw + 24px);
+      min-height:0;
+    }
+    .hero-bg{ background:linear-gradient(180deg, #f4f5f7 0%, #f1f4fa 100%); }
+    .hero-bg img{
+      position:absolute;
+      left:0;
+      bottom:0;
+      width:100%;
+      height:auto;
+      -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 25%);
+      mask-image:linear-gradient(to bottom, transparent 0, #000 25%);
+    }
+    .hero h1{ margin-top:0; font-size:36px; line-height:1.1; margin-bottom:14px; }
+    .hero p.lead{ font-size:16px; line-height:1.4; margin-bottom:20px; color:#2a3142; }
+    .hero .container > div{ max-width:none !important; }
+    .quote-card{
+      max-width:none;
+      padding:20px 18px 16px;
+      margin-bottom:0;
+      background:rgba(255,255,255,0.96);
+      border:1px solid #d6e2f7;
+      box-shadow:0 14px 36px rgba(0,82,204,0.12);
+    }
+    .quote-title{ font-size:26px; margin-bottom:12px; }
+    .quote-field{ margin-bottom:12px; }
+    .quote-field input,
+    .quote-field textarea{ background:#fff; font-size:16px; padding:12px 14px; }
+    .quote-field textarea{ min-height:80px; }
+    .quote-submit{
+      background:var(--blue);
+      box-shadow:none;
+      padding:15px;
+      font-size:17px;
+    }
+    .quote-note{ font-size:13px; }
+  }
 </style>
 </head>
 <body>
@@ -1555,12 +1780,38 @@
   <div class="container">
     <div style="max-width:620px;">
       <span class="hero-badge"><i class="fas fa-circle"></i> Open Monday – Friday</span>
-      <h1>Your Car, Fixed Right — <span class="accent">Fast &amp; Personal.</span></h1>
-      <p class="lead">Top Car Motor Sport is Tewksbury's local auto repair shop. No call centers, no runaround — just straight talk from the technician actually working on your car.</p>
+      <h1>Your Car, Fixed Right <span class="accent">Fast &amp; Personal.</span></h1>
+      <p class="lead lead-d">Top Car Motor Sport is Tewksbury's local auto repair shop. No call centers, no runaround. Just straight talk from the technician actually working on your car.</p>
+      <p class="lead lead-m">Local auto repair in Tewksbury. Tell us what your car needs. We'll get in touch.</p>
       <div class="hero-actions">
         <a href="tel:+19787702017" class="btn btn-primary pulse"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
         <a href="https://www.google.com/maps/search/?api=1&query=53+Highlanderview+Rd+Tewksbury+MA+01876" target="_blank" rel="noopener" class="btn btn-secondary btn-blue-outline"><i class="fas fa-location-arrow"></i> Get Directions</a>
       </div>
+
+      <div class="quote-card" id="quoteCard">
+        <h2 class="quote-title">Request a Quote</h2>
+        <p class="quote-sub">Tell us about your car and what you need. We'll get in touch.</p>
+        <form id="quoteForm" novalidate>
+          <div class="quote-row">
+            <div class="quote-field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" required>
+            </div>
+            <div class="quote-field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" placeholder="(978) 000-0000" autocomplete="tel" inputmode="tel" required>
+            </div>
+          </div>
+          <div class="quote-field">
+            <label for="message"><span class="d-only">What car do you have and what do you need?</span><span class="m-only">Your car &amp; service needed</span></label>
+            <textarea id="message" name="message" rows="2" placeholder="e.g. 2018 Honda Civic — oil change" required></textarea>
+          </div>
+          <p class="quote-error" id="quoteError" role="alert" hidden>Please fill in all fields.</p>
+          <button type="submit" class="quote-submit">Request a Quote <i class="fas fa-arrow-right"></i></button>
+          <p class="quote-note">Send anytime. We'll <span class="d-only">get back to you</span><span class="m-only">reply</span> during business hours.</p>
+        </form>
+      </div>
+
       <div class="hero-trust">
         <div><i class="fas fa-users"></i> Personal, one-on-one service</div>
         <div><i class="fas fa-bolt"></i> Fast turnaround</div>
@@ -1688,7 +1939,15 @@
 
       <div class="services-cta">
         <p>Didn't find the service you're looking for?</p>
-        <button class="btn">Request a Quote</button>
+        <a href="tel:+19787702017" class="btn">Request a Quote</a>
+      </div>
+    </div>
+
+    <div class="section-cta on-dark">
+      <p class="section-cta-text">Questions? Talk to us now</p>
+      <div class="section-cta-btns">
+        <a href="tel:+19787702017" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
+        <a href="https://wa.me/19787702017?text=Hi%20Top%20Car%20Motor%20Sport!%20I%27d%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
       </div>
     </div>
   </div>
@@ -1742,6 +2001,14 @@
     </div>
 
     <p class="brands-footer"><i class="fas fa-car"></i> And many more</p>
+
+    <div class="section-cta">
+      <p class="section-cta-text">Questions? Talk to us now</p>
+      <div class="section-cta-btns">
+        <a href="tel:+19787702017" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
+        <a href="https://wa.me/19787702017?text=Hi%20Top%20Car%20Motor%20Sport!%20I%27d%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1864,7 +2131,15 @@
     </div>
 
     <div class="testimonials-footer">
-      <a href="#" class="btn btn-primary" style="background-color:var(--red);"><i class="fas fa-star"></i> Read All Reviews</a>
+      <a href="https://g.page/r/CZTNeadI_aQrEBM/review" target="_blank" rel="noopener" class="btn btn-primary" style="background-color:var(--red);"><i class="fas fa-star"></i> Read All Reviews</a>
+    </div>
+
+    <div class="section-cta">
+      <p class="section-cta-text">Join our happy customers</p>
+      <div class="section-cta-btns">
+        <a href="tel:+19787702017" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
+        <a href="https://wa.me/19787702017?text=Hi%20Top%20Car%20Motor%20Sport!%20I%27d%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+      </div>
     </div>
   </div>
 </section>
@@ -1883,6 +2158,14 @@
         <div class="about-image">
           <img src="assets/equipe.jpeg" alt="Diego and Paulo, Top Car Motor Sport certified technicians">
         </div>
+      </div>
+    </div>
+
+    <div class="section-cta">
+      <p class="section-cta-text">Talk to our technicians</p>
+      <div class="section-cta-btns">
+        <a href="tel:+19787702017" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
+        <a href="https://wa.me/19787702017?text=Hi%20Top%20Car%20Motor%20Sport!%20I%27d%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
       </div>
     </div>
   </div>
@@ -1930,6 +2213,14 @@
         <span class="dot" onclick="currentSlide(3)"></span>
         <span class="dot" onclick="currentSlide(4)"></span>
         <span class="dot" onclick="currentSlide(5)"></span>
+      </div>
+    </div>
+
+    <div class="section-cta">
+      <p class="section-cta-text">Ready to experience it?</p>
+      <div class="section-cta-btns">
+        <a href="tel:+19787702017" class="btn btn-primary"><i class="fas fa-phone-alt"></i> Call (978) 770-2017</a>
+        <a href="https://wa.me/19787702017?text=Hi%20Top%20Car%20Motor%20Sport!%20I%27d%20like%20to%20request%20a%20quote." target="_blank" rel="noopener" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
       </div>
     </div>
   </div>
@@ -2174,20 +2465,26 @@
   if (quoteForm) {
     quoteForm.addEventListener('submit', function(e){
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const vehicle = document.getElementById('vehicle').value;
-      const message = document.getElementById('message').value;
+      const fields = ['name', 'phone', 'message'].map(id => document.getElementById(id));
+      let ok = true;
+      fields.forEach(f => {
+        const empty = !f.value.trim();
+        f.parentElement.classList.toggle('invalid', empty);
+        if (empty) ok = false;
+      });
+      document.getElementById('quoteError').hidden = ok;
+      if (!ok) return;
+      const [name, phone, message] = fields.map(f => f.value.trim());
       const subject = encodeURIComponent('Quote Request from ' + name);
       const body = encodeURIComponent(
         'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n' +
-        'Vehicle: ' + vehicle + '\n\n' +
-        'Message:\n' + message
+        'Phone: ' + phone + '\n\n' +
+        'Car / what they need:\n' + message
       );
       window.location.href = 'mailto:topcartewksbury@gmail.com?subject=' + subject + '&body=' + body;
     });
   }
+
 </script>
 </body>
 </html>
