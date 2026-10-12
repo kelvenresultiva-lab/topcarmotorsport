@@ -13,6 +13,9 @@
   gtag('js', new Date());
 
   gtag('config', 'AW-18396763785');
+
+  // Conversion: Page View (fires once per page load)
+  gtag('event', 'conversion', { 'send_to': 'AW-18396763785/36QcCJzcl5MdEImtocRE' });
 </script>
 <title>Top Car Motor Sport | Auto Repair in Tewksbury, MA</title>
 <meta name="description" content="Top Car Motor Sport — fast, personal auto repair in Tewksbury, MA. Oil changes, brakes, engine & transmission, A/C, diagnostics, MA state inspection and more.">
@@ -2484,17 +2487,24 @@
     initCarousel();
   }
 
-  // Google Ads conversion: WhatsApp button clicks ("Contato")
-  document.querySelectorAll('.btn-whatsapp').forEach(function(a){
-    a.addEventListener('click', function(){
-      if (typeof gtag === 'function') {
-        gtag('event', 'conversion', {
-          'send_to': 'AW-18396763785/V3sPCJeY45kdEImtocRE',
-          'value': 1.0,
-          'currency': 'USD'
-        });
-      }
-    });
+  // ---- Google Ads conversions (the global tag is loaded once in <head>) ----
+  function trackConversion(label, extra){
+    try {
+      if (typeof gtag !== 'function') return;
+      gtag('event', 'conversion', Object.assign({ 'send_to': 'AW-18396763785/' + label }, extra || {}));
+    } catch (err) { /* tracking must never break the page */ }
+  }
+
+  document.addEventListener('click', function(e){
+    // Main contact buttons (WhatsApp): "Contato"
+    if (e.target.closest('.btn-whatsapp')) {
+      trackConversion('V3sPCJeY45kdEImtocRE', { 'value': 1.0, 'currency': 'USD' });
+      return;
+    }
+    // Any phone link (tel:) and the mobile header phone button
+    if (e.target.closest('a[href^="tel:"], .nav-toggle')) {
+      trackConversion('VRFnCPvJoZodEImtocRE');
+    }
   });
 
   // Quote form -> Supabase "leads" table (see leads-config.js); email app as fallback until configured
@@ -2542,7 +2552,12 @@
         }, LEADS_CFG.anonKey.startsWith('eyJ') ? { 'Authorization': 'Bearer ' + LEADS_CFG.anonKey } : {}),
         body: JSON.stringify({ name, phone, message, source: location.href.slice(0, 300) })
       })
-        .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); showQuoteSuccess(); })
+        .then(res => {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          showQuoteSuccess();
+          // Only after the lead was really saved (never on click/submit, bot trap or email fallback)
+          trackConversion('cK4BCPjJoZodEImtocRE');
+        })
         .catch(() => {
           btn.disabled = false;
           const err = document.getElementById('quoteError');
