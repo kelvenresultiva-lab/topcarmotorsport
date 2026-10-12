@@ -103,6 +103,17 @@
   .m-status select{ width:auto; }
   .m-foot .del{ margin-left:auto; }
   .m-src{ margin-top:16px; color:var(--muted); font-size:11px; word-break:break-all; }
+  .st-help{ color:var(--muted); font-size:13px; margin:4px 0 14px; }
+  .st-row{ display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+  .st-row input{ flex:1; padding:10px 12px; border:1px solid #c9d3e6; border-radius:8px; font:inherit; }
+  .st-row button{ border:1px solid var(--line); background:#fff; border-radius:6px; width:34px; height:36px; font-size:15px; color:var(--muted); }
+  .st-row button:hover:not(:disabled){ border-color:var(--blue); color:var(--blue); }
+  .st-row button:disabled{ opacity:.35; cursor:not-allowed; }
+  .st-row .rm:hover:not(:disabled){ border-color:var(--red); color:var(--red); }
+  .st-save{ width:auto; margin-top:0; }
+  .st-msg{ font-size:13px; color:var(--muted); }
+  .setup{ margin-bottom:14px; }
+  .stats{ grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); }
   @media (max-width:900px){
     .board{ grid-template-columns:1fr; }
     .col{ min-height:0; }
@@ -144,20 +155,10 @@
     </div>
   </header>
   <main>
-    <div class="stats">
-      <div class="stat"><b id="sTotal">0</b><span>Total leads</span></div>
-      <div class="stat"><b id="sNew">0</b><span>New</span></div>
-      <div class="stat"><b id="sContacted">0</b><span>Contacted</span></div>
-      <div class="stat"><b id="sClosed">0</b><span>Closed</span></div>
-    </div>
+    <div class="stats" id="stats"></div>
     <div class="tools">
       <input type="search" id="search" placeholder="Search name, phone or message">
-      <select id="filter">
-        <option value="">All statuses</option>
-        <option value="new">New</option>
-        <option value="contacted">Contacted</option>
-        <option value="closed">Closed</option>
-      </select>
+      <select id="filter"><option value="">All statuses</option></select>
     </div>
     <div class="tools dates">
       <select id="preset" aria-label="Period">
@@ -173,11 +174,13 @@
       <label class="dl">To <input type="date" id="dTo"></label>
       <button class="btn btn-ghost" id="clearFilters" type="button">Clear filters</button>
       <span class="count" id="resultCount"></span>
+      <button class="btn btn-ghost" id="editCols" type="button" hidden>Edit columns</button>
       <div class="views" role="group" aria-label="View">
         <button type="button" id="vList" class="on">List</button>
         <button type="button" id="vBoard">Kanban</button>
       </div>
     </div>
+    <div class="setup" id="stagesNote" hidden>To rename or add Kanban columns, run <b>supabase-leads-stages.sql</b> once in Supabase (SQL Editor). Until then the 3 default columns are used.</div>
     <div id="list"></div>
     <div id="board" class="board" hidden></div>
   </main>
@@ -193,16 +196,26 @@
     <div class="m-msg" id="mMsg"></div>
     <div class="m-foot">
       <label class="m-status">Status
-        <select id="mStatus">
-          <option value="new">New</option>
-          <option value="contacted">Contacted</option>
-          <option value="closed">Closed</option>
-        </select>
+        <select id="mStatus"></select>
       </label>
       <button class="btn btn-ghost" id="mCopy" type="button">Copy details</button>
       <button class="del" id="mDelete" type="button">Delete lead</button>
     </div>
     <div class="m-src" id="mSrc"></div>
+  </div>
+</div>
+
+<div class="overlay" id="stageOverlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="stTitle">
+    <button class="x" id="stClose" type="button" aria-label="Close">&times;</button>
+    <h2 id="stTitle">Kanban columns</h2>
+    <p class="st-help">Rename, reorder, add or remove columns. Renaming never changes your leads.</p>
+    <div id="stRows"></div>
+    <button class="btn btn-ghost" id="stAdd" type="button">+ Add column</button>
+    <div class="m-foot">
+      <button class="btn btn-primary st-save" id="stSave" type="button">Save changes</button>
+      <span class="st-msg" id="stMsg"></span>
+    </div>
   </div>
 </div>
 
@@ -269,7 +282,39 @@
   }
   let shown = [];
 
+  // ---- Kanban stages (stored in the database so the owner can edit them) ----
+  const DEFAULT_STAGES = [{ key:'new', name:'New' }, { key:'contacted', name:'Contacted' }, { key:'closed', name:'Closed' }];
+  let stages = DEFAULT_STAGES.slice(), stagesEditable = false;
+  const stageName = key => (stages.find(s => s.key === key) || { name: key }).name;
+
+  async function loadStages(){
+    const { data, error } = await db.from('lead_stages').select('key,name,position').order('position', { ascending:true });
+    if (error || !data || !data.length) { stages = DEFAULT_STAGES.slice(); stagesEditable = false; }
+    else { stages = data; stagesEditable = true; }
+    $('stagesNote').hidden = stagesEditable;
+    $('editCols').hidden = !stagesEditable;
+    fillStageSelects();
+  }
+
+  function fillStageSelects(){
+    const f = $('filter'), cur = f.value;
+    f.textContent = '';
+    const all = document.createElement('option'); all.value = ''; all.textContent = 'All statuses'; f.appendChild(all);
+    stages.forEach(s => { const o = document.createElement('option'); o.value = s.key; o.textContent = s.name; f.appendChild(o); });
+    f.value = stages.some(s => s.key === cur) ? cur : '';
+    const m = $('mStatus'); m.textContent = '';
+    stages.forEach(s => { const o = document.createElement('option'); o.value = s.key; o.textContent = s.name; m.appendChild(o); });
+  }
+
+  function renderStats(){
+    const box = $('stats'); box.textContent = '';
+    const add = (n, label) => { const d = document.createElement('div'); d.className = 'stat'; const b = document.createElement('b'); b.textContent = n; const s = document.createElement('span'); s.textContent = label; d.append(b, s); box.appendChild(d); };
+    add(leads.length, 'Total leads');
+    stages.forEach(s => add(leads.filter(l => l.status === s.key).length, s.name));
+  }
+
   async function load(){
+    await loadStages();
     const { data, error } = await db.from('leads').select('*').order('created_at', { ascending:false }).limit(1000);
     if (error) { $('list').innerHTML = ''; const d = document.createElement('div'); d.className = 'empty'; d.textContent = 'Could not load leads (' + error.message + ').'; $('list').appendChild(d); return; }
     leads = data; render();
@@ -279,8 +324,7 @@
 
   function render(){
     const q = $('search').value.trim().toLowerCase(), f = $('filter').value;
-    $('sTotal').textContent = leads.length;
-    ['new','contacted','closed'].forEach(s => { $('s' + s[0].toUpperCase() + s.slice(1)).textContent = leads.filter(l => l.status === s).length; });
+    renderStats();
 
     const rows = leads.filter(l => (!f || l.status === f) && inRange(l) && (!q || (l.name + ' ' + l.phone + ' ' + l.message).toLowerCase().includes(q)));
     shown = rows;
@@ -314,7 +358,7 @@
 
       const c3 = document.createElement('div'); c3.className = 'actions';
       const sel = document.createElement('select');
-      [['new','New'],['contacted','Contacted'],['closed','Closed']].forEach(([v, t]) => { const o = document.createElement('option'); o.value = v; o.textContent = t; if (l.status === v) o.selected = true; sel.appendChild(o); });
+      stages.forEach(s => { const o = document.createElement('option'); o.value = s.key; o.textContent = s.name; if (l.status === s.key) o.selected = true; sel.appendChild(o); });
       sel.addEventListener('change', async () => {
         const { error } = await db.from('leads').update({ status: sel.value }).eq('id', l.id);
         if (error) { alert('Could not update: ' + error.message); sel.value = l.status; return; }
@@ -334,7 +378,6 @@
   }
 
   // ---- kanban ----
-  const STAGES = [['new', 'New'], ['contacted', 'Contacted'], ['closed', 'Closed']];
   let view = 'list';
   try { view = localStorage.getItem('leadsView') === 'board' ? 'board' : 'list'; } catch (e) {}
   function setView(v){ view = v; try { localStorage.setItem('leadsView', v); } catch (e) {} render(); }
@@ -350,6 +393,10 @@
 
   function renderBoard(rows){
     const board = $('board'); board.textContent = '';
+    const wide = window.matchMedia('(min-width: 901px)').matches;
+    board.style.gridTemplateColumns = wide ? 'repeat(' + Math.max(1, stages.length) + ', minmax(240px, 1fr))' : '';
+    board.style.overflowX = wide ? 'auto' : '';
+    const STAGES = stages.map(s => [s.key, s.name]);
     STAGES.forEach(([key, label], idx) => {
       const items = rows.filter(l => l.status === key);
       const col = document.createElement('div'); col.className = 'col'; col.dataset.status = key;
@@ -388,6 +435,68 @@
       board.appendChild(col);
     });
   }
+
+  // ---- edit columns ----
+  let draft = [];
+  const newKey = () => 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+
+  function openStageEditor(){
+    draft = stages.map((s, i) => ({ key: s.key, name: s.name, orig: s.name, origPos: i }));
+    $('stMsg').textContent = '';
+    drawStageRows();
+    $('stageOverlay').hidden = false;
+  }
+  function drawStageRows(){
+    const box = $('stRows'); box.textContent = '';
+    draft.forEach((s, i) => {
+      const row = document.createElement('div'); row.className = 'st-row';
+      const inp = document.createElement('input'); inp.type = 'text'; inp.maxLength = 40; inp.value = s.name; inp.setAttribute('aria-label', 'Column name');
+      inp.addEventListener('input', () => { s.name = inp.value; });
+      const up = document.createElement('button'); up.type = 'button'; up.textContent = '↑'; up.title = 'Move up'; up.disabled = i === 0;
+      up.addEventListener('click', () => { [draft[i - 1], draft[i]] = [draft[i], draft[i - 1]]; drawStageRows(); });
+      const dn = document.createElement('button'); dn.type = 'button'; dn.textContent = '↓'; dn.title = 'Move down'; dn.disabled = i === draft.length - 1;
+      dn.addEventListener('click', () => { [draft[i + 1], draft[i]] = [draft[i], draft[i + 1]]; drawStageRows(); });
+      const rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm'; rm.textContent = '×'; rm.title = s.key === 'new' ? 'The first column receives new leads and cannot be removed' : 'Remove column';
+      rm.disabled = s.key === 'new' || draft.length <= 1;
+      rm.addEventListener('click', () => { draft.splice(i, 1); drawStageRows(); });
+      row.append(inp, up, dn, rm); box.appendChild(row);
+    });
+  }
+  $('stAdd').addEventListener('click', () => { if (draft.length >= 10) { $('stMsg').textContent = 'Maximum of 10 columns.'; return; } draft.push({ key: null, name: '' }); drawStageRows(); const ins = $('stRows').querySelectorAll('input'); ins[ins.length - 1].focus(); });
+  $('editCols').addEventListener('click', openStageEditor);
+  const closeStageEditor = () => { $('stageOverlay').hidden = true; };
+  $('stClose').addEventListener('click', closeStageEditor);
+  $('stageOverlay').addEventListener('click', e => { if (e.target === $('stageOverlay')) closeStageEditor(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('stageOverlay').hidden) closeStageEditor(); });
+
+  $('stSave').addEventListener('click', async () => {
+    const msg = $('stMsg'), btn = $('stSave');
+    const names = draft.map(s => s.name.trim());
+    if (names.some(n => !n)) { msg.textContent = 'Every column needs a name.'; return; }
+    if (new Set(names.map(n => n.toLowerCase())).size !== names.length) { msg.textContent = 'Two columns have the same name.'; return; }
+
+    const kept = new Set(draft.filter(s => s.key).map(s => s.key));
+    const removed = stages.filter(s => !kept.has(s.key));
+    const movedCount = removed.reduce((n, s) => n + leads.filter(l => l.status === s.key).length, 0);
+    if (removed.length && !confirm('Remove: ' + removed.map(s => s.name).join(', ') + '.' + (movedCount ? '\n' + movedCount + ' lead(s) in removed columns will be moved to "' + stageName('new') + '".' : '') + '\n\nContinue?')) return;
+
+    btn.disabled = true; msg.textContent = 'Saving...';
+    try {
+      for (const s of removed) {
+        let r = await db.from('leads').update({ status: 'new' }).eq('status', s.key); if (r.error) throw r.error;
+        r = await db.from('lead_stages').delete().eq('key', s.key); if (r.error) throw r.error;
+      }
+      for (let i = 0; i < draft.length; i++) {
+        const s = draft[i], name = names[i];
+        if (s.key) { const r = await db.from('lead_stages').update({ name, position: i }).eq('key', s.key); if (r.error) throw r.error; }
+        else { const key = newKey(); const r = await db.from('lead_stages').insert({ key, name, position: i }); if (r.error) throw r.error; s.key = key; }
+      }
+      closeStageEditor();
+      await load();
+    } catch (err) {
+      msg.textContent = 'Could not save: ' + (err.message || err);
+    } finally { btn.disabled = false; }
+  });
 
   // ---- lead detail window ----
   let current = null;
@@ -432,7 +541,7 @@
   $('csvBtn').addEventListener('click', () => {
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const safe = v => /^[=+\-@]/.test(String(v)) ? "'" + v : v;
-    const rows = [['Date','Name','Phone','Message','Status']].concat(shown.map(l => [l.created_at, safe(l.name), safe(l.phone), safe(l.message), l.status]));
+    const rows = [['Date','Name','Phone','Message','Status']].concat(shown.map(l => [l.created_at, safe(l.name), safe(l.phone), safe(l.message), stageName(l.status)]));
     const blob = new Blob([rows.map(r => r.map(esc).join(',')).join('\n')], { type:'text/csv;charset=utf-8' });
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'top-car-leads.csv'; a.click(); URL.revokeObjectURL(a.href);
   });
